@@ -30,24 +30,6 @@ const mockSubjects: Subject[] = [
     description: "Materia fundamental sobre algoritmos de ordenamiento, búsqueda, estructuras de datos complejas y análisis de complejidad computacional",
     duration: "Anual"
   },
-  {
-    id: 4,
-    title: "Desarrollo Web Frontend",
-    description: "Desarrollo de interfaces modernas con React, TypeScript, Next.js y herramientas de testing para crear aplicaciones web escalables",
-    duration: "Cuatrimestral"
-  },
-  {
-    id: 5,
-    title: "Base de Datos",
-    description: "Diseño, implementación y administración de bases de datos relacionales y NoSQL, optimización de consultas y modelado de datos",
-    duration: "Cuatrimestral"
-  },
-  {
-    id: 6,
-    title: "Sistemas Operativos",
-    description: "Fundamentos de sistemas operativos, gestión de procesos, memoria, sistemas de archivos y programación concurrente",
-    duration: "Anual"
-  }
 ]
 
 function SubjectsSection() {
