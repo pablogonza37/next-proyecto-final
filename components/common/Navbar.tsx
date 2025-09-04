@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export const Navbar = () => {
   return (
@@ -6,16 +6,20 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-white">Aula Link</h1>
+            <Link href="/" className="text-2xl font-bold text-white hover:text-gray-300">
+              Aula Link
+            </Link>
           </div>
 
           <nav className="hidden md:flex space-x-8"></nav>
 
           <div className="flex items-center space-x-4">
-            <Button variant="outline" className="border-gray-700 text-gray-200 hover:bg-gray-700 bg-transparent">
+            <Link href="/login" className="px-4 py-2 border border-gray-700 text-gray-200 hover:bg-gray-700 bg-transparent rounded-md transition-colors">
               Iniciar Sesión
-            </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">Registrarse</Button>
+            </Link>
+            <Link href="/register" className="px-4 py-2 border border-gray-700 text-gray-200 hover:bg-gray-700 bg-transparent rounded-md transition-colors">
+              Registrarse
+            </Link>
           </div>
         </div>
       </div>
