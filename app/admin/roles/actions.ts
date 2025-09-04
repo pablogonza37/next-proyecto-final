@@ -14,3 +14,19 @@ export async function obtenerRoles() {
     throw new Error("No se pudieron cargar los roles");
   }
 }
+
+// Acción para crear un nuevo rol
+export async function nuevoRol(data: { nombreRol: string; estado: number }) {
+  try {
+    const res = await axios.post(`${API_URL}/roles/nuevo`, data, {
+      headers: { "Content-Type": "application/json" }
+    });
+    console.log(res);
+    return res.data;
+  } catch (error: any) {
+    console.error("Error al crear rol:", error.response?.data);
+    const mensaje = error.response?.data?.mensaje || "No se pudo crear el rol";
+
+    throw new Error(mensaje);
+  }
+}
