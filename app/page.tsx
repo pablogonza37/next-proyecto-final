@@ -1,17 +1,16 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { motion } from "framer-motion"
 import {
   Search,
   Star,
   Users,
-  Clock,
   BookOpen,
 } from "lucide-react"
 import StaffSection from "@/components/homepage/Staff/StaffSection"
+import SubjectsSection from "@/components/homepage/Subjects/SubjectsSection"
 
 export default function HomePage() {
   const fadeInUp = {
@@ -39,7 +38,7 @@ export default function HomePage() {
       <motion.section className="bg-gradient-to-b from-gray-800 to-black py-20" {...fadeIn}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2 className="text-5xl font-bold text-white mb-6" {...fadeInUp}>
-            Inscríbete en las Mejores Materias
+            Inscríbete a tus Materias
           </motion.h2>
           <motion.p
             className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto"
@@ -89,105 +88,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section
-        className="py-16 bg-gradient-to-b from-gray-900 to-gray-800"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h3
-            className="text-3xl font-bold text-white mb-12 text-center"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Materias Destacadas
-          </motion.h3>
-
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-          >
-            <motion.div variants={fadeInUp} whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
-              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-64 flex flex-col overflow-hidden">
-                <CardHeader className="flex-1 p-6">
-                  <CardTitle className="text-white text-lg font-semibold">Matemática Superior</CardTitle>
-                  <CardDescription className="text-gray-400 text-sm leading-relaxed">
-                    Materia fundamental de cálculo diferencial e integral, álgebra lineal y matemática discreta
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="mt-auto p-6 pt-0">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4 text-gray-400 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>Cuatrimestral</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">Inscribirse</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={fadeInUp} whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
-              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-64 flex flex-col overflow-hidden">
-                <CardHeader className="flex-1 p-6">
-                  <CardTitle className="text-white text-lg font-semibold">Ing. de Software</CardTitle>
-                  <CardDescription className="text-gray-400 text-sm leading-relaxed">
-                    Materia de desarrollo backend con Node.js, bases de datos y arquitectura de microservicios
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="mt-auto p-6 pt-0">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4 text-gray-400 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>Cuatrimestral</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">Inscribirse</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={fadeInUp} whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
-              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-64 flex flex-col overflow-hidden">
-                <CardHeader className="flex-1 p-6">
-                  <CardTitle className="text-white text-lg font-semibold">Algoritmos y Estructura de Datos</CardTitle>
-                  <CardDescription className="text-gray-400 text-sm leading-relaxed">
-                    Materia fundamental sobre algoritmos de ordenamiento, búsqueda y estructuras de datos complejas
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="mt-auto p-6 pt-0">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4 text-gray-400 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        <span>Anual</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">Inscribirse</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.section>
+      <SubjectsSection />
 
       <motion.section
         className="py-16 bg-gradient-to-br from-gray-800 via-gray-900 to-black"
