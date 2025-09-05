@@ -2,6 +2,7 @@ import AdminRoute from "@/components/admin/AdminRoute";
 
 const adminNavigation = [
     {url: '/admin/roles', text: 'Roles', blank: false},
+    {url: '/admin/usuarios', text: 'Usuarios', blank: false},
     {url: '/admin/materias', text: 'Materias', blank: false},
     {url: '/admin/comisiones', text: 'Comisiones', blank: false},
     {url: '/admin/inscripciones', text: 'Inscripciones', blank: false},
