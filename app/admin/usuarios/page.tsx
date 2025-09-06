@@ -7,14 +7,14 @@ import TablaUsuarios from "@/components/usuarios/TablaUsuarios";
 const UsuariosPage = async () => {
 
   const usuarios = await obtenerUsuarios();
-  console.log(usuarios)
+  //console.log(usuarios)
 
   return (
    <>
-    <Heading>Administración de Roles</Heading>
+    <Heading>Administración de Usuarios</Heading>
 
     <div className="flex flex-col md:flex-row md:justify-end gap-5">
-      <Link href={'/admin/usuarios/nuevo'} className="bg-blue-600 hover:bg-blue-800 font-bold text-xl text-white py-3 px-5 rounded transition-all cursor-pointer">Crear Rol</Link>
+      <Link href={'/admin/usuarios/nuevo'} className="bg-blue-600 hover:bg-blue-800 font-bold text-xl text-white py-3 px-5 rounded transition-all cursor-pointer">Crear Usuario</Link>
 
     </div>
 

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { nuevoRol } from "@/app/admin/roles/actions";
 import { useState } from "react";
 import { nuevoUsuario } from "@/app/admin/usuarios/actions";
 
@@ -50,9 +49,9 @@ const UsuarioFormNuevo = () => {
     try {
       const payload = { ...data };
       const res = await nuevoUsuario(payload); // tu acción para enviar al backend
-      setMensaje(`Usuario "${res.nombreUsuario}" creado correctamente`);
+      setMensaje(`Usuario "${res.nombre}" creado correctamente`);
       reset();
-      router.push('/admin/roles');
+      router.push('/admin/usuarios');
     } catch (error: any) {
       setMensaje(error.message || "Error al crear el usuario");
     }

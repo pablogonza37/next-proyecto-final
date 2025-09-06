@@ -19,7 +19,7 @@ export async function obtenerUsuarios() {
 export async function nuevoUsuario(data: { nombreUsuario: string; apellidoUsuario: string, dni: number, email: string, password: string, role: string }) {
   console.log(data)
   try {
-    const res = await axios.post(`${API_URL}/usuarios/nuevo`, data, {
+    const res = await axios.post(`${API_URL}/auth/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
     console.log(res);
@@ -32,19 +32,39 @@ export async function nuevoUsuario(data: { nombreUsuario: string; apellidoUsuari
   }
 }
 
+// Acción para obtener un usuario existente
+export async function obtenerUsuario(id: string) {
+  const res = await axios.get(`${API_URL}/auth/${id}`);
+  return res.data;
+}
+
 // Acción para actualizar un usuario existente
 export async function actualizarUsuario(
   id: string,
   data: {nombreUsuario: string; apellidoUsuario: string, dni: number, email: string, password: string, role: string; estado: number }
 ) {
   try {
-    const res = await axios.put(`${API_URL}/usuarios/${id}`, data, {
+    const res = await axios.put(`${API_URL}/auth/${id}`, data, {
       headers: { "Content-Type": "application/json" }
     });
     return res.data;
   } catch (error: any) {
     console.error("Error al actualizar el usuario:", error.response?.data);
     const mensaje = error.response?.data?.mensaje || "No se pudo actualizar el usuario";
+    throw new Error(mensaje);
+  }
+}
+
+//Acción para borrar un usuario existente
+export async function borrarUsuario(id: string) {
+  try {
+    const res = await axios.delete(`${API_URL}/auth/${id}`, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data; // devuelve lo que la API responda
+  } catch (error: any) {
+    console.error("Error al borrar el usuario:", error.response?.data);
+    const mensaje = error.response?.data?.mensaje || "No se pudo borrar el usuario";
     throw new Error(mensaje);
   }
 }

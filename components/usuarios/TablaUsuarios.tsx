@@ -1,4 +1,12 @@
+"use client"
 import Link from "next/link"
+import BotonBorrar from "../ui/BotonBorrar";
+import { borrarUsuario } from "@/app/admin/usuarios/actions";
+
+interface Rol {
+    _id: string;
+    nombreRol: string;
+}
 
 interface Usuario {
   _id: string;
@@ -6,7 +14,7 @@ interface Usuario {
   apellidoUsuario: string;
   dni: number;
   email: string;
-  role: string;
+  role: Rol;
   estado: number;
 }
 
@@ -69,7 +77,7 @@ const TablaUsuarios = ({usuarios}: TablaUsuariosProps) => {
                                         </td>
 
                                          <td className="whitespace-nowrap py-4 pl-5 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                            {usuario.role}
+                                            {usuario.role?.nombreRol}
                                         </td>
 
                                         <td className="whitespace-nowrap py-4 pl-5 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
@@ -84,6 +92,13 @@ const TablaUsuarios = ({usuarios}: TablaUsuariosProps) => {
                                         <td className="whitespace-nowrap py-4 pl-4 pr-5 text-sm font-medium sm:pr-0">
                                             <Link href={`/admin/usuarios/${usuario._id}/editar`} className="bg-yellow-200 hover:bg-yellow-300 font-bold text-xl text-black py-3 px-5 rounded transition-all cursor-pointer">Editar</Link>
                                         </td>
+
+                                        <td className="whitespace-nowrap py-4 pl-4 pr-5 text-sm font-medium sm:pr-0">
+                                            <BotonBorrar nombreItem={usuario.nombreUsuario} action={() => borrarUsuario(usuario._id)}
+                                            />
+                                        </td>
+                                        
+                                        
                                     </tr>
                                 ))
                                 ) : (
