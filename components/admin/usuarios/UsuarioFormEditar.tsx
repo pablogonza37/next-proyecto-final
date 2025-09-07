@@ -97,6 +97,7 @@ const UsuarioFormEditar = ({ usuario }: UsuarioFormEditarProps) => {
             <option value={1}>Activo</option>
             <option value={0}>Inactivo</option>
           </select>
+          {errors.estado && <p className="text-red-500">{errors.estado.message}</p>}
         </div>
 
         <button type="submit" disabled={isSubmitting} className="bg-yellow-500 text-white p-2 rounded">
