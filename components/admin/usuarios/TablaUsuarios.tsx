@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import BotonBorrar from "../ui/BotonBorrar";
+import BotonBorrar from "../../ui/BotonBorrar";
 import { borrarUsuario } from "@/app/admin/usuarios/actions";
 
 interface Rol {

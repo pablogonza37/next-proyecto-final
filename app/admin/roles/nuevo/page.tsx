@@ -1,5 +1,5 @@
 import Heading from '@/components/ui/Heading';
-import RolForm from '@/components/roles/RolForm';
+import RolForm from '@/components/admin/roles/RolForm';
 import Link from 'next/link';
 
 const NuevoRolPage = () => {

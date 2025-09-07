@@ -1,6 +1,6 @@
 import Heading from '@/components/ui/Heading';
 import Link from 'next/link';
-import RolFormEditar from '@/components/roles/RolFormEditar'; // el formulario de editar
+import RolFormEditar from '@/components/admin/roles/RolFormEditar'; // el formulario de editar
 
 interface EditarRolPageProps {
   params: { id: string }; // Next 13 App Router, obtenemos el id de la URL

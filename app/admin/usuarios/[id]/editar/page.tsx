@@ -1,15 +1,19 @@
 import { obtenerUsuario } from "@/app/admin/usuarios/actions";
-import UsuarioFormEditar from "@/components/usuarios/UsuarioFormEditar";
+import UsuarioFormEditar from "@/components/admin/usuarios/UsuarioFormEditar";
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
 
 interface PageProps {
-  params: { id: string };
+  params: { id: string } | Promise<{ id: string }>; // puede venir como Promise
 }
 
 const EditarUsuarioPage = async ({ params }: PageProps) => {
-  const usuario = await obtenerUsuario(params.id);
+  const resolvedParams = await params; // 🔹 await aquí
+  const id = resolvedParams.id;
+  const usuario = await obtenerUsuario(id);
   //console.log(usuario)
+
+   if (!usuario) return <p>Usuario no encontrado</p>;
 
   return (
     <>

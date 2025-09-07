@@ -1,5 +1,5 @@
 import Heading from '@/components/ui/Heading';
-import UsuarioFormNuevo from '@/components/usuarios/UsuarioFormNuevo';
+import UsuarioFormNuevo from '@/components/admin/usuarios/UsuarioFormNuevo';
 
 import Link from 'next/link';
 

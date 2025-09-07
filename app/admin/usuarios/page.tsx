@@ -2,7 +2,7 @@ import { obtenerUsuarios } from "./actions";
 
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
-import TablaUsuarios from "@/components/usuarios/TablaUsuarios";
+import TablaUsuarios from "@/components/admin/usuarios/TablaUsuarios";
 
 const UsuariosPage = async () => {
 

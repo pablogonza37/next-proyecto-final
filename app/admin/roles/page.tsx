@@ -2,7 +2,7 @@ import { obtenerRoles } from "./actions";
 
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
-import TablaRoles from "@/components/roles/TablaRoles";
+import TablaRoles from "@/components/admin/roles/TablaRoles";
 
 const RolesPage = async () => {
 
