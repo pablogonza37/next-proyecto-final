@@ -37,7 +37,7 @@ const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
   return (
     <button
       onClick={handleDelete}
-      className={className || "bg-red-200 hover:bg-red-300 font-bold text-xl text-black py-3 px-5 rounded transition-all cursor-pointer"}
+      className={className || "bg-red-200 hover:bg-red-300 font-bold text-xl text-black mx-2 py-3 px-5 rounded transition-all cursor-pointer"}
     >
       Borrar
     </button>

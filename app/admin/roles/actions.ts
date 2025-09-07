@@ -21,7 +21,7 @@ export async function nuevoRol(data: { nombreRol: string; estado: number }) {
     const res = await axios.post(`${API_URL}/roles/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
-    console.log(res);
+    //console.log(res);
     return res.data;
   } catch (error: any) {
     console.error("Error al crear rol:", error.response?.data);

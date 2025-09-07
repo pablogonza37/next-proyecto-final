@@ -17,12 +17,12 @@ export async function obtenerUsuarios() {
 
 // Acción para crear un nuevo usuario
 export async function nuevoUsuario(data: { nombreUsuario: string; apellidoUsuario: string, dni: number, email: string, password: string, role: string }) {
-  console.log(data)
+  //console.log(data)
   try {
     const res = await axios.post(`${API_URL}/auth/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
-    console.log(res);
+    //console.log(res);
     return res.data;
   } catch (error: any) {
     console.error("Error al crear usuario:", error.response?.data);
