@@ -47,3 +47,9 @@ export async function actualizarRol(
     throw new Error(mensaje);
   }
 }
+
+// Acción para obtener un rol existente
+export async function obtenerRol(id: string) {
+  const res = await axios.get(`${API_URL}/roles/${id}`);
+  return res.data;
+}

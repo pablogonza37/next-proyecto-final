@@ -1,13 +1,19 @@
 import Heading from '@/components/ui/Heading';
 import Link from 'next/link';
 import RolFormEditar from '@/components/admin/roles/RolFormEditar'; // el formulario de editar
+import { obtenerRol } from '../../actions';
 
 interface EditarRolPageProps {
-  params: { id: string }; // Next 13 App Router, obtenemos el id de la URL
+  params: { id: string } | Promise<{ id: string }>; 
 }
 
-const EditarRolPage = ({ params }: EditarRolPageProps) => {
-  const { id } = params;
+
+const EditarRolPage = async ({ params }: EditarRolPageProps) => {
+    const resolvedParams = await params; 
+    const id = resolvedParams.id;
+    const rol = await obtenerRol(id);
+  
+     if (!rol) return <p>Rol no encontrado</p>;
 
   return (
     <>
@@ -21,7 +27,7 @@ const EditarRolPage = ({ params }: EditarRolPageProps) => {
         </Link>
       </div>
 
-      <RolFormEditar rolId={id} />
+      <RolFormEditar rolId={id} rolData={rol}/>
     </>
   );
 };

@@ -16,7 +16,7 @@ const rolSchema = z.object({
     .refine(val => ["admin", "alumno", "profesor"].includes(val), {
       message: "El rol debe ser admin, alumno o profesor"
     }),
-  estado: z.enum(["0", "1"])
+  estado: z.number()
 });
 
 type RolFormData = z.infer<typeof rolSchema>;
@@ -32,7 +32,7 @@ const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset, setValue } = useForm<RolFormData>({
     resolver: zodResolver(rolSchema),
-    defaultValues: rolData || { nombreRol: "", estado: "1" }
+    defaultValues: rolData 
   });
 
   // Si no pasamos rolData por props, podemos traerlo desde API
@@ -56,9 +56,9 @@ const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
   const onSubmit = async (data: RolFormData) => {
     setMensaje(null);
     try {
-      const payload = { ...data, estado: parseInt(data.estado) };
+      const payload = { ...data, estado: data.estado };
       const res = await actualizarRol(rolId, payload);
-      setMensaje(`Rol "${res.nombreRol}" actualizado correctamente`);
+      setMensaje(res.mensaje);
       // Redireccionar a roles
       router.push('/admin/roles');
     } catch (error: any) {
@@ -83,8 +83,8 @@ const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
         <div className="space-y-2">
           <label className="text-gray-800" htmlFor="selectionType">Tipo de Estado:</label>
           <select id="selectionType" {...register("estado")} className="block w-full p-3 bg-gray-100 mt-3">
-            <option value="1">Activo</option>
-            <option value="0">Inactivo</option>
+            <option value={1}>Activo</option>
+            <option value={0}>Inactivo</option>
           </select>
           {errors.estado && <p className="text-red-500">{errors.estado.message}</p>}
         </div>
