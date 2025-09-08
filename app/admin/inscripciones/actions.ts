@@ -1,6 +1,7 @@
 // app/inscripciones/actions.ts
 "use server";
 
+import { dataInscripcionInterface } from "@/components/types/actions";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
@@ -24,7 +25,7 @@ export async function obtenerInscripcion(id: string) {
 // Acción para actualizar una inscripción existente
 export async function actualizarInscripcion(
   id: string,
-  data: { fechaInscripcion: Date; estado: number; comision: string; materia: string; usuario: string; }
+  data: dataInscripcionInterface
 ) {
   try {
     const res = await axios.put(`${API_URL}/inscripciones/${id}`, data, {

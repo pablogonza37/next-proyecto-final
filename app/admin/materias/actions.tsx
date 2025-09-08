@@ -28,7 +28,6 @@ export async function nuevaMateria(data: { nombreMateria: string; descripcion: s
     const res = await axios.post(`${API_URL}/materias/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
-    //console.log(res);
     return res.data;
   } catch (error: any) {
     console.error("Error al crear materia:", error.response?.data);

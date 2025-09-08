@@ -62,7 +62,6 @@ const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
       // Redireccionar a roles
       router.push('/admin/roles');
     } catch (error: any) {
-      console.log(error)
       setMensaje(error.message || "Error al actualizar el rol");
     }
   };

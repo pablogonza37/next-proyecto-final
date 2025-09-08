@@ -18,8 +18,6 @@ const EditarInscripcionPage = async ({ params }: PageProps) => {
   // 🔹 Obtener la inscripción
   const inscripcion = await obtenerInscripcion(id);
 
-  console.log(inscripcion)
-
   // 🔹 Obtener opciones relacionadas
   const comisiones = await obtenerComisiones();
   const materias = await obtenerMaterias();

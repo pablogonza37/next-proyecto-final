@@ -1,6 +1,7 @@
 // app/roles/actions.ts
 "use server";
 
+import { dataRolInterface } from "@/components/types/actions";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
@@ -16,12 +17,11 @@ export async function obtenerRoles() {
 }
 
 // Acción para crear un nuevo rol
-export async function nuevoRol(data: { nombreRol: string; estado: number }) {
+export async function nuevoRol(data: dataRolInterface) {
   try {
     const res = await axios.post(`${API_URL}/roles/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
-    //console.log(res);
     return res.data;
   } catch (error: any) {
     console.error("Error al crear rol:", error.response?.data);
@@ -34,7 +34,7 @@ export async function nuevoRol(data: { nombreRol: string; estado: number }) {
 // Acción para actualizar un rol existente
 export async function actualizarRol(
   id: string,
-  data: { nombreRol: string; estado: number }
+  data: dataRolInterface
 ) {
   try {
     const res = await axios.put(`${API_URL}/roles/${id}`, data, {

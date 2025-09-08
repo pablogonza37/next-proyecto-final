@@ -5,14 +5,13 @@ import Link from "next/link";
 import { obtenerMateria } from "../../actions";
 
 interface PageProps {
-  params: { id: string } | Promise<{ id: string }>; // puede venir como Promise
+  params: { id: string } | Promise<{ id: string }>; 
 }
 
 const EditarMateriaPage = async ({ params }: PageProps) => {
-  const resolvedParams = await params; // 🔹 await aquí
+  const resolvedParams = await params; 
   const id = resolvedParams.id;
   const materia = await obtenerMateria(id);
-  //console.log(materia)
 
    if (!materia) return <p>Materia no encontrada</p>;
 

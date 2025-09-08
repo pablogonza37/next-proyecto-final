@@ -1,6 +1,7 @@
 // app/comisiones/actions.ts
 "use server";
 
+import { dataComisionInterface } from "@/components/types/actions";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
@@ -23,12 +24,11 @@ export async function obtenerComision(id: string) {
 
 
 // Acción para crear una nueva comisión
-export async function nuevaComision(data: { nombreComision: string; fechaInicio: Date; fechaFin: Date;  horaInicio: string; horaFin: string; diasDictado: string; cupo: number; estado: number; materia: string; usuario: string; }) {
+export async function nuevaComision(data: dataComisionInterface) {
   try {
     const res = await axios.post(`${API_URL}/comisiones/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
-    //console.log(res);
     return res.data;
   } catch (error: any) {
     console.error("Error al crear una comisión:", error.response?.data);
@@ -41,7 +41,7 @@ export async function nuevaComision(data: { nombreComision: string; fechaInicio:
 // Acción para actualizar una comisión existente
 export async function actualizarComision(
   id: string,
-  data: { nombreComision: string; fechaInicio: Date; fechaFin: Date; cupo: number; estado: number; horaInicio: string; horaFin: string; diasDictado: string; materia: string; usuario: string; }
+  data: dataComisionInterface
 ) {
   try {
     const res = await axios.put(`${API_URL}/comisiones/${id}`, data, {

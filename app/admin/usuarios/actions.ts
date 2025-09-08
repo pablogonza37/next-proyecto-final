@@ -1,6 +1,7 @@
 // app/usuarios/actions.ts
 "use server";
 
+import { dataUsuarioInterface } from "@/components/types/actions";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
@@ -8,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
 export async function obtenerUsuarios() {
   try {
     const res = await axios.get(`${API_URL}/auth`);
-    return res.data; // axios ya trae el .json()
+    return res.data; 
   } catch (error) {
     console.error("Error al obtener usuarios:", error);
     throw new Error("No se pudieron cargar los usuarios");
@@ -16,13 +17,11 @@ export async function obtenerUsuarios() {
 }
 
 // Acción para crear un nuevo usuario
-export async function nuevoUsuario(data: { nombreUsuario: string; apellidoUsuario: string, dni: number, email: string, password: string, role: string }) {
-  //console.log(data)
+export async function nuevoUsuario(data: dataUsuarioInterface) {
   try {
     const res = await axios.post(`${API_URL}/auth/nuevo`, data, {
       headers: { "Content-Type": "application/json" }
     });
-    //console.log(res);
     return res.data;
   } catch (error: any) {
     console.error("Error al crear usuario:", error.response?.data);
@@ -41,7 +40,7 @@ export async function obtenerUsuario(id: string) {
 // Acción para actualizar un usuario existente
 export async function actualizarUsuario(
   id: string,
-  data: {nombreUsuario: string; apellidoUsuario: string, dni: number, email: string, password: string, role: string; estado: number }
+  data: dataUsuarioInterface
 ) {
   try {
     const res = await axios.put(`${API_URL}/auth/${id}`, data, {

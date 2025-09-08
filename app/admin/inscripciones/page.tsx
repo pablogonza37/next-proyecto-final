@@ -9,7 +9,6 @@ import TablaInscripciones from "@/components/admin/inscripciones/TablaInscripcio
 const InscripcionesPage = async () => {
 
   const inscripciones = await obtenerInscripciones();
-  console.log(inscripciones)
 
   return (
    <>

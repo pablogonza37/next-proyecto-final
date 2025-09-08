@@ -7,7 +7,6 @@ import TablaUsuarios from "@/components/admin/usuarios/TablaUsuarios";
 const UsuariosPage = async () => {
 
   const usuarios = await obtenerUsuarios();
-  //console.log(usuarios)
 
   return (
    <>

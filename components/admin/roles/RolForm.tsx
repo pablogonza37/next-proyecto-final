@@ -44,7 +44,6 @@ const RolForm = () => {
             //Redireccionar a roles
             router.push('/admin/roles');
         } catch (error: any) {
-            console.log(error)
             setMensaje(error.message || "Error al crear el rol");
         }    
     };

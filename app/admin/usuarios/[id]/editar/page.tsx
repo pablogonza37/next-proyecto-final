@@ -4,14 +4,13 @@ import Heading from "@/components/ui/Heading";
 import Link from "next/link";
 
 interface PageProps {
-  params: { id: string } | Promise<{ id: string }>; // puede venir como Promise
+  params: { id: string } | Promise<{ id: string }>; 
 }
 
 const EditarUsuarioPage = async ({ params }: PageProps) => {
-  const resolvedParams = await params; // 🔹 await aquí
+  const resolvedParams = await params; 
   const id = resolvedParams.id;
   const usuario = await obtenerUsuario(id);
-  //console.log(usuario)
 
    if (!usuario) return <p>Usuario no encontrado</p>;
 

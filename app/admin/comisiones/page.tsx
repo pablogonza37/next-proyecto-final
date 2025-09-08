@@ -9,7 +9,6 @@ import TablaComisiones from "@/components/admin/comisiones/TablaComisiones";
 const ComisionesPage = async () => {
 
   const comisiones = await obtenerComisiones();
-  //console.log(comisiones)
 
   return (
    <>
