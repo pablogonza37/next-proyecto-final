@@ -1,3 +1,5 @@
+import axios from "axios"
+
 export interface RegisterPayload {
   nombreUsuario: string
   apellidoUsuario: string
@@ -8,17 +10,19 @@ export interface RegisterPayload {
 }
 
 export const registerUser = async (data: RegisterPayload) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/registro`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
+  try {
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/registro`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
 
-  const result = await res.json()
-
-  if (!res.ok) {
-    throw new Error(result.mensaje || "Error al registrar usuario")
+    return res.data
+  } catch (error: any) {
+    // Axios guarda la respuesta del servidor en error.response
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.mensaje || "Error al registrar usuario")
+    }
+    throw new Error(error.message || "Error al registrar usuario")
   }
-
-  return result
 }
