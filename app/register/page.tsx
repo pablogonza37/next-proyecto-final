@@ -1,18 +1,21 @@
-"use client"
+"use client";
 
-import React from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
-import { motion } from "framer-motion"
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { motion } from "framer-motion";
+
 
 type RegisterFormInputs = {
-  fullName: string
-  dni: string
-  birthDate: string
-  age: number
-  email: string
-  password: string
-  confirmPassword: string
-}
+  nombreUsuario: string;
+  apellidoUsuario: string;
+  dni: string;
+  birthDate: string;
+  age: number;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: string;
+};
 
 const RegisterPage: React.FC = () => {
   const {
@@ -20,15 +23,11 @@ const RegisterPage: React.FC = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<RegisterFormInputs>()
-
-  const onSubmit: SubmitHandler<RegisterFormInputs> = (data) => {
-    console.log("Datos del registro:", data)
-   
-  }
+  } = useForm<RegisterFormInputs>();
 
   
-  const password = watch("password")
+
+  const password = watch("password");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -38,177 +37,156 @@ const RegisterPage: React.FC = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-2xl bg-gray-900/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-700"
       >
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white">Crear Cuenta</h1>
-          <p className="text-gray-400 text-sm mt-2">
-            Regístrate para acceder al portal de inscripción
-          </p>
-        </div>
+        <h1 className="text-3xl font-bold text-white mb-6 text-center">
+          Crear Cuenta
+        </h1>
 
-        {/* 🔹 Formulario con react-hook-form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Nombre completo */}
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Nombre completo
-            </label>
-            <input
-              type="text"
-              placeholder="Juan Pérez"
-              {...register("fullName", {
-                required: "El nombre es obligatorio",
-                minLength: { value: 3, message: "Mínimo 3 caracteres" },
-              })}
-              className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-            />
-            {errors.fullName && (
-              <p className="text-red-500 text-sm mt-1">{errors.fullName.message}</p>
-            )}
-          </div>
+          {/* Nombre */}
+          <input
+            type="text"
+            placeholder="Nombre"
+            {...register("nombreUsuario", {
+              required: "El nombre del usuario es obligatorio",
+              minLength: {
+                value: 3,
+                message:
+                  "El nombre del usuario debe contener al menos 3 caracteres",
+              },
+              maxLength: {
+                value: 30,
+                message: "El nombre del usuario no puede superar 30 caracteres",
+              },
+              pattern: {
+                value: /^[A-Za-zÀ-ÿ\s]+$/, // solo letras y espacios
+                message: "El nombre solo puede contener letras",
+              },
+            })}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          />
+          {errors.nombreUsuario && (
+            <p className="text-red-400">{errors.nombreUsuario.message}</p>
+          )}
 
-          {/* DNI, Fecha nacimiento, Edad */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                DNI
-              </label>
-              <input
-                type="text"
-                placeholder="12345678"
-                {...register("dni", {
-                  required: "El DNI es obligatorio",
-                  pattern: {
-                    value: /^[0-9]{7,9}$/,
-                    message: "DNI inválido (7-9 dígitos)",
-                  },
-                })}
-                className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-              />
-              {errors.dni && (
-                <p className="text-red-500 text-sm mt-1">{errors.dni.message}</p>
-              )}
-            </div>
+          {/* Apellido */}
+          <input
+            type="text"
+            placeholder="Apellido"
+            {...register("apellidoUsuario", {
+              required: "El apellido del usuario es obligatorio",
+              minLength: {
+                value: 3,
+                message: "El apellido debe contener al menos 3 caracteres",
+              },
+              maxLength: {
+                value: 40,
+                message: "El apellido no puede superar 40 caracteres",
+              },
+              pattern: {
+                value: /^[A-Za-zÀ-ÿ\s]+$/, // solo letras y espacios
+                message: "El apellido solo puede contener letras",
+              },
+            })}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          />
+          {errors.apellidoUsuario && (
+            <p className="text-red-400">{errors.apellidoUsuario.message}</p>
+          )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Fecha de nacimiento
-              </label>
-              <input
-                type="date"
-                {...register("birthDate", { required: "La fecha es obligatoria" })}
-                className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-              />
-              {errors.birthDate && (
-                <p className="text-red-500 text-sm mt-1">{errors.birthDate.message}</p>
-              )}
-            </div>
+          {/* DNI */}
+          <input
+            type="text"
+            placeholder="DNI"
+            {...register("dni", {
+              required: "El DNI es obligatorio",
+              pattern: {
+                value: /^[0-9]{1,8}$/, // Ajusta el rango según tu país
+                message: "El DNI debe ser un número válido",
+              },
+            })}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          />
+          {errors.dni && <p className="text-red-400">{errors.dni.message}</p>}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Edad
-              </label>
-              <input
-                type="number"
-                placeholder="18"
-                {...register("age", {
-                  required: "La edad es obligatoria",
-                  min: { value: 18, message: "Debes ser mayor de 18" },
-                })}
-                className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-              />
-              {errors.age && (
-                <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
-              )}
-            </div>
-          </div>
+          {/* Email */}
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            {...register("email", {
+              required: "El e-mail es obligatorio",
+              minLength: {
+                value: 5,
+                message: "El e-mail debe tener al menos 5 caracteres",
+              },
+              maxLength: {
+                value: 60,
+                message: "El e-mail no puede superar 60 caracteres",
+              },
+              pattern: {
+                value: /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/,
+                message:
+                  "El e-mail debe cumplir con el formato juan@correo.com",
+              },
+            })}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          />
+          {errors.email && (
+            <p className="text-red-400">{errors.email.message}</p>
+          )}
 
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Correo electrónico
-            </label>
-            <input
-              type="email"
-              placeholder="ejemplo@instituto.edu"
-              {...register("email", {
-                required: "El email es obligatorio",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Formato de email inválido",
-                },
-              })}
-              className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-            )}
-          </div>
+          {/* Contraseña */}
+          <input
+            type="password"
+            placeholder="Contraseña"
+            {...register("password", {
+              required: "La contraseña es obligatoria",
+              pattern: {
+                value: /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/,
+                message:
+                  "Debe tener 8-16 caracteres, al menos un número, una minúscula, una mayúscula y sin caracteres especiales",
+              },
+            })}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          />
+          {errors.password && (
+            <p className="text-red-400">{errors.password.message}</p>
+          )}
 
-         
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                {...register("password", {
-                  required: "La contraseña es obligatoria",
-                  minLength: { value: 6, message: "Mínimo 6 caracteres" },
-                })}
-                className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-              />
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+          {/* Confirmar contraseña */}
+          <input
+            type="password"
+            placeholder="Confirmar contraseña"
+            {...register("confirmPassword", {
+              required: "Repite la contraseña",
+              validate: (val) => val === password || "No coinciden",
+            })}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          />
+          {errors.confirmPassword && (
+            <p className="text-red-400">{errors.confirmPassword.message}</p>
+          )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Confirmar contraseña
-              </label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                {...register("confirmPassword", {
-                  required: "Debes confirmar la contraseña",
-                  validate: (value) =>
-                    value === password || "Las contraseñas no coinciden",
-                })}
-                className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700 focus:ring-2 focus:ring-blue-500 outline-none transition"
-              />
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-          </div>
+          {/* Rol */}
+          <select
+            {...register("role")}
+            className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"
+          >
+            <option value="alumno">Alumno</option>
+            <option value="profesor">Profesor</option>
+          </select>
 
-          
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg transition"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg"
           >
             Registrarse
           </motion.button>
         </form>
-
-       
-        <p className="text-gray-400 text-xs text-center mt-6">
-          ¿Ya tienes una cuenta?{" "}
-          <a href="/login" className="text-blue-500 hover:underline">
-            Inicia sesión aquí
-          </a>
-        </p>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;
