@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
-
+import { registerUser } from "../services/registerService";
 
 type RegisterFormInputs = {
   nombreUsuario: string;
@@ -25,7 +25,22 @@ const RegisterPage: React.FC = () => {
     formState: { errors },
   } = useForm<RegisterFormInputs>();
 
-  
+  const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
+    try {
+      const result = await registerUser({
+        nombreUsuario: data.nombreUsuario,
+        apellidoUsuario: data.apellidoUsuario,
+        dni: data.dni,
+        email: data.email,
+        password: data.password,
+        role: data.role || "alumno",
+      });
+
+      alert(`✅ Usuario creado: ${result.nombre}`);
+    } catch (error: any) {
+      alert(`❌ ${error.message}`);
+    }
+  };
 
   const password = watch("password");
 
