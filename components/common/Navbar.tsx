@@ -2,6 +2,8 @@
 
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
+import Swal from "sweetalert2"
+import "sweetalert2/dist/sweetalert2.min.css"
 
 export const Navbar = () => {
   const { data: session } = useSession()
@@ -9,6 +11,14 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/" })
+    Swal.fire({
+      icon: "success",
+      title: "Has cerrado sesión correctamente",
+      timer: 2000,
+      showConfirmButton: false,
+      timerProgressBar: true,
+      position: "top-end",
+    })
   }
 
   return (

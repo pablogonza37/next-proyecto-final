@@ -6,6 +6,8 @@ import { motion } from "framer-motion"
 import { signIn, useSession } from "next-auth/react"
 import { useSessionStore } from "@/app/zustand/stores/sessionStore"
 import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
+import "sweetalert2/dist/sweetalert2.min.css"
 
 type LoginFormInputs = {
   email: string
@@ -20,7 +22,6 @@ const LoginPage: React.FC = () => {
 
   useEffect(() => {
     if (session?.user) {
-      // Guardamos datos en Zustand desde la sesión
       setSession(
         session.user.nombreUsuario!,
         session.user.rol!,
@@ -44,14 +45,31 @@ const LoginPage: React.FC = () => {
       })
 
       if (res?.error) {
-        alert("Credenciales inválidas")
-      } else {
-        // La sesión ya se guarda automáticamente en Zustand
-        router.push("/") 
+        Swal.fire({
+          icon: "error",
+          title: "Credenciales inválidas",
+          timer: 2000,
+          showConfirmButton: false,
+        })
+      } else {   
+        Swal.fire({
+          icon: "success",
+          title: "Usuario logueado correctamente",
+          timer: 2000,
+          showConfirmButton: false,
+        })
+        setTimeout(() => {
+          router.push("/")
+        }, 2000)
       }
     } catch (err) {
       console.error(err)
-      alert("Error en el servidor")
+      Swal.fire({
+        icon: "error",
+        title: "Error en el servidor",
+        timer: 2000,
+        showConfirmButton: false,
+      })
     }
   }
 
@@ -111,7 +129,9 @@ const LoginPage: React.FC = () => {
               className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 placeholder-gray-500 border border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
