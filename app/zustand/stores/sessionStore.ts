@@ -1,19 +1,18 @@
-import { create } from "zustand"
+import { create } from "zustand";
 
 interface SessionState {
-  nombreUsuario: string
-  rol: string
-  backendToken: string
-  setSession: (nombreUsuario: string, rol: string, backendToken: string) => void
-  clearSession: () => void
+  nombreUsuario: string | null;
+  rol: string | null;
+  token: string | null;
+  setSession: (nombreUsuario: string, rol: string, token: string) => void;
+  clearSession: () => void;
 }
 
 export const useSessionStore = create<SessionState>((set) => ({
-  nombreUsuario: "",
-  rol: "",
-  backendToken: "",
-  setSession: (nombreUsuario, rol, backendToken) =>
-    set({ nombreUsuario, rol, backendToken }),
-  clearSession: () =>
-    set({ nombreUsuario: "", rol: "", backendToken: "" }),
-}))
+  nombreUsuario: null,
+  rol: null,
+  token: null,
+  setSession: (nombreUsuario, rol, token) =>
+    set({ nombreUsuario, rol, token }),
+  clearSession: () => set({ nombreUsuario: null, rol: null, token: null }),
+}));

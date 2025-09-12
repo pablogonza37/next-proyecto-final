@@ -1,9 +1,11 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { motion } from "framer-motion"
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
+import { useSessionStore } from "@/app/zustand/stores/sessionStore"
+import { useRouter } from "next/navigation"
 
 type LoginFormInputs = {
   email: string
@@ -12,6 +14,21 @@ type LoginFormInputs = {
 }
 
 const LoginPage: React.FC = () => {
+  const { data: session } = useSession()
+  const setSession = useSessionStore((state) => state.setSession)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session?.user) {
+      // Guardamos datos en Zustand desde la sesión
+      setSession(
+        session.user.nombreUsuario!,
+        session.user.rol!,
+        session.backendToken!
+      )
+    }
+  }, [session, setSession])
+
   const {
     register,
     handleSubmit,
@@ -29,16 +46,14 @@ const LoginPage: React.FC = () => {
       if (res?.error) {
         alert("Credenciales inválidas")
       } else {
-
-        alert("usuario logueado")
-        window.location.href = "/" 
+        // La sesión ya se guarda automáticamente en Zustand
+        router.push("/") 
       }
     } catch (err) {
       console.error(err)
       alert("Error en el servidor")
     }
   }
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -48,6 +63,7 @@ const LoginPage: React.FC = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-md bg-gray-900/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-700"
       >
+        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white">Portal de Inscripción</h1>
           <p className="text-gray-400 text-sm mt-2">
@@ -55,8 +71,8 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-       
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Email
@@ -78,7 +94,6 @@ const LoginPage: React.FC = () => {
             )}
           </div>
 
-          
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Contraseña
@@ -96,13 +111,10 @@ const LoginPage: React.FC = () => {
               className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 placeholder-gray-500 border border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             />
             {errors.password && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.password.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
 
-         
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center text-gray-400">
               <input
@@ -117,7 +129,6 @@ const LoginPage: React.FC = () => {
             </a>
           </div>
 
-         
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -128,11 +139,11 @@ const LoginPage: React.FC = () => {
           </motion.button>
         </form>
 
-       
+        {/* Footer */}
         <p className="text-gray-400 text-xs text-center mt-6">
           ¿No tenes una cuenta?{" "}
           <a href="/register" className="text-blue-500 hover:underline">
-            Registrarte aqui
+            Registrarte aquí
           </a>
         </p>
         <p className="text-gray-400 text-xs text-center mt-6">
