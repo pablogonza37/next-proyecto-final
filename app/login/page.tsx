@@ -18,7 +18,27 @@ const LoginPage: React.FC = () => {
     formState: { errors },
   } = useForm<LoginFormInputs>()
 
-  
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      })
+
+      if (res?.error) {
+        alert("Credenciales inválidas")
+      } else {
+
+        alert("usuario logueado")
+        window.location.href = "/" 
+      }
+    } catch (err) {
+      console.error(err)
+      alert("Error en el servidor")
+    }
+  }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -35,9 +55,8 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        {/* 🔹 Formulario con react-hook-form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Email */}
+       
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Email
@@ -59,7 +78,7 @@ const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Contraseña */}
+          
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Contraseña
@@ -83,7 +102,7 @@ const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Recordarme + link */}
+         
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center text-gray-400">
               <input
@@ -98,7 +117,7 @@ const LoginPage: React.FC = () => {
             </a>
           </div>
 
-          {/* Botón submit */}
+         
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -109,7 +128,7 @@ const LoginPage: React.FC = () => {
           </motion.button>
         </form>
 
-        {/* Footer */}
+       
         <p className="text-gray-400 text-xs text-center mt-6">
           ¿No tenes una cuenta?{" "}
           <a href="/register" className="text-blue-500 hover:underline">
