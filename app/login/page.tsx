@@ -3,6 +3,7 @@
 import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { motion } from "framer-motion"
+import { signIn } from "next-auth/react"
 
 type LoginFormInputs = {
   email: string
@@ -17,10 +18,7 @@ const LoginPage: React.FC = () => {
     formState: { errors },
   } = useForm<LoginFormInputs>()
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log("Datos del login:", data)
-    
-  }
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
