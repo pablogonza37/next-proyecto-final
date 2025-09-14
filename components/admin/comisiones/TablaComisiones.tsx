@@ -44,7 +44,7 @@ const TablaComisiones = ({ comisiones }: TablaComisionesProps) => {
                   <th className="py-3 text-left text-sm font-semibold text-gray-700">Días Dictado</th>
                   <th className="py-3 text-left text-sm font-semibold text-gray-700">Cupo</th>
                   <th className="py-3 text-left text-sm font-semibold text-gray-700">Estado</th>
-                  <th className="py-3 pr-5 text-right text-sm font-semibold text-gray-700">Acciones</th>
+                  <th className="py-3 pr-5 text-center text-sm font-semibold text-gray-700">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">

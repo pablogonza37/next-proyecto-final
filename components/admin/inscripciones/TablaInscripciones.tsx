@@ -30,8 +30,8 @@ interface TablaInscripcionesProps {
 const TablaInscripciones = ({ inscripciones }: TablaInscripcionesProps) => {
   return (
     <div className="px-4 mt-8 flex justify-center">
-      <div className="mt-2 flow-root">
-        <div className="overflow-x-auto ">
+      <div className="mt-2 flow-root w-full">
+        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 w-full">
           <div className="inline-block min-w-full py-2 align-middle bg-white p-5">
             <table className="min-w-full divide-y divide-gray-500">
               <thead>
@@ -41,7 +41,7 @@ const TablaInscripciones = ({ inscripciones }: TablaInscripcionesProps) => {
                   <th className="py-3 text-left text-sm font-semibold text-gray-700">Usuario</th>
                   <th className="py-3 text-left text-sm font-semibold text-gray-700">Fecha Inscripción</th>
                   <th className="py-3 text-left text-sm font-semibold text-gray-700">Estado</th>
-                  <th className="py-3 pr-5 text-right text-sm font-semibold text-gray-700">Acciones</th>
+                  <th className="py-3 text-center text-sm font-semibold text-gray-700 sm:pr-0">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">

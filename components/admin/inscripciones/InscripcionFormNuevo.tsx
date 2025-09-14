@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useEffect } from "react";
-import { actualizarInscripcion } from "@/app/admin/inscripciones/actions"; // acción al backend
+import { useEffect, useState } from "react";
+import { nuevaInscripcion } from "@/app/admin/inscripciones/actions"; // acción al backend
 
+// Validaciones con Zod
 const inscripcionSchema = z.object({
   materia: z.string().min(1, "Debe seleccionar una materia"),
   comision: z.string().min(1, "Debe seleccionar una comisión"),
@@ -16,36 +17,27 @@ const inscripcionSchema = z.object({
 
 type InscripcionFormData = z.infer<typeof inscripcionSchema>;
 
-interface InscripcionFormEditarProps {
+interface InscripcionFormNuevoProps {
   materias: any[];
   comisiones: any[];
   usuarios: any[];
-  inscripcion: InscripcionFormData & { _id: string };
 }
 
-const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: InscripcionFormEditarProps) => {
+const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFormNuevoProps) => {
   const router = useRouter();
   const [mensaje, setMensaje] = useState<string | null>(null);
-  const [materiaSeleccionada, setMateriaSeleccionada] = useState<string>(inscripcion.materia || "");
+  const [materiaSeleccionada, setMateriaSeleccionada] = useState<string>("");
 
-  const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, reset } = useForm<InscripcionFormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset, setValue } = useForm<InscripcionFormData>({
     resolver: zodResolver(inscripcionSchema),
     defaultValues: {
-      ...inscripcion,
-      fechaInscripcion: inscripcion.fechaInscripcion.split('T')[0], // yyyy-MM-dd
-      estado: inscripcion.estado.toString() as "0" | "1",
+      materia: "",
+      comision: "",
+      usuario: "",
+      fechaInscripcion: "",
+      estado: "1", // por defecto activa
     },
   });
-
-   useEffect(() => {
-    if (inscripcion) {
-      reset({
-        ...inscripcion,
-        fechaInscripcion: inscripcion.fechaInscripcion.split('T')[0],
-        estado: inscripcion.estado.toString() as "0" | "1",
-      });
-    }
-  }, [inscripcion, reset]);
 
   const onSubmit = async (data: InscripcionFormData) => {
     setMensaje(null);
@@ -55,19 +47,22 @@ const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: 
         fechaInscripcion: new Date(data.fechaInscripcion),
         estado: parseInt(data.estado),
       };
-      const res = await actualizarInscripcion(inscripcion._id,payload);
+      const res = await nuevaInscripcion(payload);
       setMensaje(res.mensaje);
+      reset(); // limpia el formulario
       router.push("/admin/inscripciones");
     } catch (error: any) {
-      console.log(error);
-      setMensaje(error.message || "Error al actualizar la inscripción");
+      console.log(error)
+      setMensaje(error.message || "Error al crear la inscripción");
     }
   };
 
-  // Filtrar comisiones según materia seleccionada
-  const comisionesFiltradas = comisiones.filter(
-    (c) => c.materia?._id === materiaSeleccionada
-  );
+
+   // Filtrar comisiones
+   const comisionesFiltradas = comisiones.filter(
+     (c) => c.materia?._id === materiaSeleccionada
+   );
+  
 
   return (
     <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
@@ -83,7 +78,7 @@ const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: 
             onChange={(e) => {
               const value = e.target.value;
               setMateriaSeleccionada(value);
-              setValue("comision", ""); // limpiar comisión si cambia materia
+              setValue("comision", ""); // 🔑 limpia la comisión al cambiar materia
             }}
           >
             <option value="">Seleccione una materia</option>
@@ -101,7 +96,7 @@ const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: 
             id="comision"
             {...register("comision")}
             className="block w-full p-3 bg-gray-100 mt-3 disabled:opacity-50"
-            disabled={!materiaSeleccionada}
+            disabled={!materiaSeleccionada} // 🔑 deshabilitado si no hay materia
           >
             <option value="">Seleccione una comisión</option>
             {comisionesFiltradas.map((c) => (
@@ -126,12 +121,7 @@ const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: 
         {/* Fecha de inscripción */}
         <div className="space-y-2">
           <label htmlFor="fechaInscripcion" className="text-gray-800">Fecha de inscripción:</label>
-          <input
-            id="fechaInscripcion"
-            type="date"
-            {...register("fechaInscripcion")}
-            className="block w-full p-3 bg-gray-100 mt-3"
-          />
+          <input id="fechaInscripcion" type="date" {...register("fechaInscripcion")} className="block w-full p-3 bg-gray-100 mt-3" />
           {errors.fechaInscripcion && <p className="text-red-500">{errors.fechaInscripcion.message}</p>}
         </div>
 
@@ -146,7 +136,7 @@ const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: 
         </div>
 
         <button type="submit" disabled={isSubmitting} className="bg-green-500 text-white p-2 rounded disabled:opacity-50">
-          {isSubmitting ? "Actualizando..." : "Actualizar Inscripción"}
+          {isSubmitting ? "Creando..." : "Crear Inscripción"}
         </button>
 
         {mensaje && (
@@ -159,4 +149,4 @@ const InscripcionFormEditar = ({ materias, comisiones, usuarios, inscripcion }: 
   );
 };
 
-export default InscripcionFormEditar;
+export default InscripcionFormNuevo;
