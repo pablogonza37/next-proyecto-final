@@ -57,7 +57,7 @@ const PlanDeEstudios: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-wrap gap-4 flex-1 min-h-0"
+            className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0 overflow-x-auto"
           >
             {getNivelesOrdenados().map((nivel, index) => (
               <NivelColumn
