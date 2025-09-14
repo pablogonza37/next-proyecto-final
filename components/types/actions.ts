@@ -32,3 +32,11 @@ export interface dataInscripcionInterface {
     materia: string; 
     usuario: string; 
 }
+
+export interface dataMateriaInterface {
+    _id: string;
+    nombreMateria: string;
+    descripcion: string;
+    nivel: string;
+    estado: number;
+}
