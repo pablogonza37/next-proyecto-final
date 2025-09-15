@@ -131,7 +131,7 @@ const MateriaSearcher: React.FC<MateriaSearcherProps> = ({ className = "" }) => 
     }
   }, [])
 
-  const highlightMatch = (text: string, search: string): JSX.Element => {
+  const highlightMatch = (text: string, search: string): React.ReactNode => {
     if (!search.trim()) return <span>{text}</span>
 
     const regex = new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
