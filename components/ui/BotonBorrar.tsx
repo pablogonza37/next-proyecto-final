@@ -16,9 +16,9 @@ const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
 
     if (result.isConfirmed) {
       try {
-        await action(); // ejecuta la función de borrado (axios)
+        await action();
         await showSuccess("¡Eliminado!", `${nombreItem} ha sido eliminado correctamente`);
-        router.refresh(); // 🔹 Esto recarga los datos del server component
+        router.refresh();
       } catch (error: unknown) {
         await showError("Error al eliminar", error instanceof Error ? error.message : "No se pudo eliminar el elemento");
         console.error(error);
