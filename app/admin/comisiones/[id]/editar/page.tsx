@@ -1,5 +1,4 @@
 import { obtenerUsuarios } from "@/app/admin/usuarios/actions";
-import MateriaFormEditar from "@/components/admin/materias/MateriaFormEditar";
 import Heading from "@/components/ui/Heading";
 import Link from "next/link";
 import { obtenerComision } from "../../actions";
@@ -7,19 +6,20 @@ import ComisionFormEditar from "@/components/admin/comisiones/ComisionFormEditar
 import { obtenerMaterias } from "@/app/admin/materias/actions";
 
 interface PageProps {
-  params: { id: string } | Promise<{ id: string }>; // puede venir como Promise
+  params: { id: string } | Promise<{ id: string }>; 
 }
 
 const EditarComisionPage = async ({ params }: PageProps) => {
-  const resolvedParams = await params; // 🔹 await aquí
+  const resolvedParams = await params; 
   const id = resolvedParams.id;
   const comision = await obtenerComision(id);
 
   const materias = await obtenerMaterias();
   
-  //Filtrar usuarios por rol "profesor"
+ 
   const usuarios = await obtenerUsuarios();
-  const profesores = usuarios.filter((u:any) => u.role === "profesor" || u.role.nombreRol === "profesor");
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const profesores = usuarios.filter((u: any) => u.role === "profesor" || u.role.nombreRol === "profesor");
 
   if (!comision) return <p>Comisión no encontrada</p>;
 

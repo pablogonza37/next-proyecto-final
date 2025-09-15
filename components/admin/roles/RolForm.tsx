@@ -1,5 +1,5 @@
 'use client'
-// import axios from "axios";
+
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { nuevoRol } from "@/app/admin/roles/actions";
 import { useState } from "react";
 
-// 1. Definimos el esquema de Zod igual que el backend
 const rolSchema = z.object({
   nombreRol: z
     .string()
@@ -19,7 +18,6 @@ const rolSchema = z.object({
   estado: z.enum(["0", "1"])
 });
 
-// 2. Tipo inferido a partir del esquema
 type RolFormData = z.infer<typeof rolSchema>;
 
 const RolForm = () => {
@@ -35,18 +33,16 @@ const RolForm = () => {
     const onSubmit = async (data: RolFormData) => {
         setMensaje(null);
         try {
-            // Convertimos estado a number antes de enviar
             const payload = { ...data, estado: parseInt(data.estado) };
             const res = await nuevoRol(payload);
             setMensaje(`Rol "${res.nombreRol}" creado correctamente`);
-            reset(); // Limpiamos el formulario
+            reset(); 
 
-            //Redireccionar a roles
             router.push('/admin/roles');
-        } catch (error: any) {
-            setMensaje(error.message || "Error al crear el rol");
+        } catch (error: unknown) {
+            setMensaje(error instanceof Error ? error.message : "Error al crear el rol");
         }    
-    };
+    };  
     
   return (
 

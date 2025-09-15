@@ -42,11 +42,11 @@ const RegisterPage: React.FC = () => {
         title: "Usuario creado",
         text: `✅ ${result.nombre} se registró correctamente`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: `❌ ${error.message}`,
+        text: `❌ ${error instanceof Error ? error.message : "Error al registrar usuario"}`,
       });
     }
   };
@@ -69,7 +69,6 @@ const RegisterPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Nombre */}
           <input
             type="text"
             placeholder="Nombre"
@@ -92,7 +91,6 @@ const RegisterPage: React.FC = () => {
           />
           {errors.nombreUsuario && <p className="text-red-400">{errors.nombreUsuario.message}</p>}
 
-          {/* Apellido */}
           <input
             type="text"
             placeholder="Apellido"
@@ -106,7 +104,6 @@ const RegisterPage: React.FC = () => {
           />
           {errors.apellidoUsuario && <p className="text-red-400">{errors.apellidoUsuario.message}</p>}
 
-          {/* DNI */}
           <input
             type="text"
             placeholder="DNI"
@@ -118,7 +115,6 @@ const RegisterPage: React.FC = () => {
           />
           {errors.dni && <p className="text-red-400">{errors.dni.message}</p>}
 
-          {/* Email */}
           <input
             type="email"
             placeholder="Correo electrónico"
@@ -132,7 +128,6 @@ const RegisterPage: React.FC = () => {
           />
           {errors.email && <p className="text-red-400">{errors.email.message}</p>}
 
-          {/* Contraseña */}
           <input
             type="password"
             placeholder="Contraseña"
@@ -148,7 +143,6 @@ const RegisterPage: React.FC = () => {
           />
           {errors.password && <p className="text-red-400">{errors.password.message}</p>}
 
-          {/* Confirmar contraseña */}
           <input
             type="password"
             placeholder="Confirmar contraseña"
@@ -160,7 +154,6 @@ const RegisterPage: React.FC = () => {
           />
           {errors.confirmPassword && <p className="text-red-400">{errors.confirmPassword.message}</p>}
 
-          {/* Rol */}
           <select
             {...register("role")}
             className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 border border-gray-700"

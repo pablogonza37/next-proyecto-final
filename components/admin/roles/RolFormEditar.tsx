@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { actualizarRol } from "@/app/admin/roles/actions"; // función de API para actualizar
+import { actualizarRol } from "@/app/admin/roles/actions"; 
 import { useState, useEffect } from "react";
 
-// Esquema igual al de crear
 const rolSchema = z.object({
   nombreRol: z
     .string()
@@ -23,29 +22,27 @@ type RolFormData = z.infer<typeof rolSchema>;
 
 interface RolFormProps {
   rolId: string;
-  rolData?: RolFormData; // opcional, se puede pasar desde la página
+  rolData?: RolFormData; 
 }
 
 const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
   const router = useRouter();
   const [mensaje, setMensaje] = useState<string | null>(null);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset, setValue } = useForm<RolFormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<RolFormData>({
     resolver: zodResolver(rolSchema),
     defaultValues: rolData 
   });
 
-  // Si no pasamos rolData por props, podemos traerlo desde API
   useEffect(() => {
     if (!rolData) {
       const fetchRol = async () => {
         try {
           const res = await fetch(`/api/roles/${rolId}`);
           const data = await res.json();
-          // Asignamos los valores al form
           setValue("nombreRol", data.nombreRol);
           setValue("estado", data.estado);
-        } catch (error) {
+        } catch (error: unknown) {
           console.error("Error al cargar rol:", error);
         }
       };
@@ -59,10 +56,9 @@ const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
       const payload = { ...data, estado: data.estado };
       const res = await actualizarRol(rolId, payload);
       setMensaje(res.mensaje);
-      // Redireccionar a roles
       router.push('/admin/roles');
-    } catch (error: any) {
-      setMensaje(error.message || "Error al actualizar el rol");
+    } catch (error: unknown) {
+      setMensaje(error instanceof Error ? error.message : "Error al actualizar el rol");
     }
   };
 

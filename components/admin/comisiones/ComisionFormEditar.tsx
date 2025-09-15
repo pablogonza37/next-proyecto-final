@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
-import { actualizarComision } from "@/app/admin/comisiones/actions"; // acción al backend
+import { actualizarComision } from "@/app/admin/comisiones/actions"; 
 
-// Validaciones con Zod
 const comisionSchema = z.object({
   nombreComision: z.string()
     .min(2, "El nombre de la comisión debe tener al menos 2 caracteres")
@@ -28,8 +27,10 @@ const comisionSchema = z.object({
 type ComisionFormData = z.infer<typeof comisionSchema>;
 
 interface ComisionFormEditarProps {
-  comision: ComisionFormData & { _id: string }; // los datos existentes
+  comision: ComisionFormData & { _id: string }; 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   materias: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   usuarios: any[];
 }
 
@@ -41,11 +42,10 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
     resolver: zodResolver(comisionSchema),
     defaultValues: {
       ...comision,
-      // Convertir fechas ISO a "yyyy-MM-dd" para el input date
       fechaInicio: comision.fechaInicio.split('T')[0],
       fechaFin: comision.fechaFin.split('T')[0],
       cupo: String(comision.cupo),
-      estado: comision.estado.toString() as "0" | "1", // ✅ convertir a enum
+      estado: comision.estado.toString() as "0" | "1", 
     },
   });
 
@@ -53,10 +53,10 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
     if (comision) {
     reset({
       ...comision,
-      fechaInicio: comision.fechaInicio.split('T')[0], // "2025-09-15"
-      fechaFin: comision.fechaFin.split('T')[0],       // "2025-09-30"
+      fechaInicio: comision.fechaInicio.split('T')[0], 
+      fechaFin: comision.fechaFin.split('T')[0],       
       cupo: String(comision.cupo),
-      estado: comision.estado.toString() as "0" | "1", // ✅ convertir a enum
+      estado: comision.estado.toString() as "0" | "1", 
     });
   }
   }, [comision, reset]);
@@ -74,15 +74,14 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
       const res = await actualizarComision(comision._id,payload);
       setMensaje(res.mensaje);
       router.push("/admin/comisiones");
-    } catch (error: any) {
-      setMensaje(error.message || "Error al actualizar la comisión");
+    } catch (error: unknown) {
+      setMensaje(error instanceof Error ? error.message : "Error al actualizar la comisión");
     }
   };
 
   return (
     <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Nombre Comisión */}
         <div className="space-y-2">
           <label htmlFor="nombreComision" className="text-gray-800">
             Nombre de la Comisión:
@@ -96,7 +95,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           {errors.nombreComision && <p className="text-red-500">{errors.nombreComision.message}</p>}
         </div>
 
-        {/* Fechas */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="fechaInicio" className="text-gray-800">Fecha Inicio:</label>
@@ -121,7 +119,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           </div>
         </div>
 
-        {/* Horarios */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="horaInicio" className="text-gray-800">Hora Inicio:</label>
@@ -146,7 +143,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           </div>
         </div>
 
-        {/* Días de dictado */}
         <div className="space-y-2">
           <label htmlFor="diasDictado" className="text-gray-800">
             Días de Dictado:
@@ -160,7 +156,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           {errors.diasDictado && <p className="text-red-500">{errors.diasDictado.message}</p>}
         </div>
 
-        {/* Cupo */}
         <div className="space-y-2">
           <label htmlFor="cupo" className="text-gray-800">
             Cupo:
@@ -174,7 +169,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           {errors.cupo && <p className="text-red-500">{errors.cupo.message}</p>}
         </div>
 
-        {/* Materia */}
         <div className="space-y-2">
           <label htmlFor="materia" className="text-gray-800">
             Materia:
@@ -194,7 +188,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           {errors.materia && <p className="text-red-500">{errors.materia.message}</p>}
         </div>
 
-        {/* Usuario */}
         <div className="space-y-2">
           <label htmlFor="usuario" className="text-gray-800">
             Usuario:
@@ -214,7 +207,6 @@ const ComisionFormEditar = ({ comision, materias, usuarios }: ComisionFormEditar
           {errors.usuario && <p className="text-red-500">{errors.usuario.message}</p>}
         </div>
 
-        {/* Estado */}
         <div className="space-y-2">
           <label htmlFor="estado" className="text-gray-800">Estado:</label>
           <select
