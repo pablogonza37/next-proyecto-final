@@ -33,8 +33,8 @@ const mockStaffMembers: StaffMember[] = [
   {
     id: 3,
     name: "Pablo Gonzalez",
-    imageSrc: "/staff/FranciscoPerez.png",
-    linkedinUrl: "#",
+    imageSrc: "/staff/PabloGonzalez.png",
+    linkedinUrl: "https://www.linkedin.com/in/pablo-gonzalez-92b360382",
     role: "Profesor de Algoritmos",
     description: "Especialista en estructuras de datos y algoritmos con amplia experiencia en optimización de código."
   },
