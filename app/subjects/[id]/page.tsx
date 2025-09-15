@@ -3,12 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { motion } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Loader from "@/components/ui/Loader"
 import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star } from "lucide-react"
 import { obtenerMateriaPorId, nuevaInscripcionCompleta } from "@/app/admin/inscripciones/actions"
-import { dataMateriaInterface } from "@/components/types/actions"
 import { useSession } from "next-auth/react"
 import { useRouter as useNextRouter } from "next/navigation"
 import Image from "next/image"
@@ -41,10 +40,8 @@ const SubjectDetailPage: React.FC = () => {
       try {
         setLoading(true)
         const materiaData = await obtenerMateriaPorId(id)
-        console.log(materiaData)
         setSubject(materiaData)
       } catch (err) {
-        console.error("Error al cargar materia:", err)
         setError("No se pudo cargar la información de la materia")
       } finally {
         setLoading(false)
@@ -66,72 +63,67 @@ const SubjectDetailPage: React.FC = () => {
     return `Nivel ${nivelNum}`
   }
 
-  const getSubjectImage = (nombreMateria: string): string => {
-    const materia = nombreMateria.toLowerCase()
-    
-    if (materia.includes('matemática') || materia.includes('algebra') || materia.includes('cálculo') || materia.includes('geometría')) {
-      return 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('física') || materia.includes('mecánica')) {
-      return 'https://images.unsplash.com/photo-1636953056323-9c09fdd74fa6?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('química') || materia.includes('laboratorio')) {
-      return 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('programación') || materia.includes('software') || materia.includes('informática') || materia.includes('sistemas')) {
-      return 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('economía') || materia.includes('administración') || materia.includes('contabilidad') || materia.includes('finanzas')) {
-      return 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('historia') || materia.includes('filosofía') || materia.includes('literatura')) {
-      return 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('inglés') || materia.includes('idioma') || materia.includes('lengua')) {
-      return 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('biología') || materia.includes('medicina') || materia.includes('anatomía')) {
-      return 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('derecho') || materia.includes('legal') || materia.includes('jurídico')) {
-      return 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=600&fit=crop&crop=entropy'
-    }
-    if (materia.includes('psicología') || materia.includes('sociología')) {
-      return 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&h=600&fit=crop&crop=entropy'
-    }
-    
+  const getSubjectImage = (): string => {
     return 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&crop=entropy'
   }
 
 
   const handleInscripcion = async () => {
-    if (status !== "authenticated" || !session?.user?.email || !subject) {
+    if (status !== "authenticated" || !session?.user?.email || !subject || !session?.backendToken) {
       nextRouter.push('/login')
+      return
+    }
+
+    if (subject.estado !== 1) {
+      setError("Esta materia no está disponible para inscripción")
       return
     }
 
     try {
       setInscribing(true)
+      setError(null)
       
       const fechaActual = new Date().toISOString().split('T')[0]
-      const nombreComision = `Comisión ${subject.nombreMateria} - ${new Date().getFullYear()}`
       
       await nuevaInscripcionCompleta(
-        nombreComision,
-        subject.nombreMateria,
+        subject._id,
         session.user.email,
-        fechaActual
+        fechaActual,
+        session.backendToken
       )
       
       setInscriptionSuccess(true)
       
       setTimeout(() => {
         setInscriptionSuccess(false)
-      }, 3000)
+      }, 5000)
 
     } catch (err: any) {
-      console.error("Error al inscribirse:", err)
-      setError(err.message || "No se pudo completar la inscripción")
+      let mensajeError = "No se pudo completar la inscripción"
+      
+      if (err.message.includes("ya está inscrito") || err.message.includes("already enrolled")) {
+        mensajeError = "Ya te encuentras inscrito en esta materia"
+      } else if (err.message.includes("no encontrado") || err.message.includes("not found")) {
+        mensajeError = "La materia no está disponible para inscripción"
+      } else if (err.message.includes("cupo") || err.message.includes("capacity")) {
+        mensajeError = "No hay cupos disponibles para esta materia"
+      } else if (err.message.includes("network") || err.message.includes("Network")) {
+        mensajeError = "Error de conexión. Por favor, intenta nuevamente"
+      } else if (err.message.includes("401") || err.message.includes("unauthorized")) {
+        mensajeError = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente"
+        setTimeout(() => {
+          nextRouter.push('/login')
+        }, 2000)
+      } else if (err.message) {
+        mensajeError = err.message
+      }
+      
+      setError(mensajeError)
+      
+      setTimeout(() => {
+        setError(null)
+      }, 7000)
+      
     } finally {
       setInscribing(false)
     }
@@ -178,11 +170,10 @@ const SubjectDetailPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Hero Section with Background Image */}
       <div className="relative h-96 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src={getSubjectImage(subject.nombreMateria)}
+            src={getSubjectImage()}
             alt={subject.nombreMateria}
             fill
             className="object-cover"
@@ -234,7 +225,6 @@ const SubjectDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Content Section */}
       <div className="relative -mt-20 z-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -243,7 +233,6 @@ const SubjectDetailPage: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-8"
           >
-            {/* Inscription Card */}
             <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 shadow-2xl">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -253,6 +242,11 @@ const SubjectDetailPage: React.FC = () => {
                     {status !== "authenticated" && (
                       <p className="text-sm text-blue-400 mt-2">
                         💡 Inicia sesión para inscribirte
+                      </p>
+                    )}
+                    {subject.estado !== 1 && (
+                      <p className="text-sm text-red-400 mt-2">
+                        ⚠️ Esta materia no está disponible para inscripción
                       </p>
                     )}
                   </div>
@@ -272,13 +266,32 @@ const SubjectDetailPage: React.FC = () => {
                     ) : (
                       <Button
                         onClick={handleInscripcion}
-                        disabled={inscribing}
-                        className="bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25 transform transition-all duration-200 text-white px-10 py-4 text-lg font-medium rounded-lg min-w-[220px]"
+                        disabled={inscribing || status !== "authenticated" || subject.estado !== 1}
+                        className={`${
+                          status !== "authenticated" || subject.estado !== 1
+                            ? "bg-gray-600 cursor-not-allowed opacity-50" 
+                            : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25"
+                        } transform transition-all duration-200 text-white px-10 py-4 text-lg font-medium rounded-lg min-w-[220px]`}
                       >
-                        {inscribing ? (
+                        {status === "loading" ? (
+                          <>
+                            <Loader size="sm" />
+                            <span className="ml-2">Cargando...</span>
+                          </>
+                        ) : inscribing ? (
                           <>
                             <Loader size="sm" />
                             <span className="ml-2">Inscribiendo...</span>
+                          </>
+                        ) : status !== "authenticated" ? (
+                          <>
+                            <BookOpen className="h-5 w-5 mr-2" />
+                            Inicia Sesión para Inscribirte
+                          </>
+                        ) : subject.estado !== 1 ? (
+                          <>
+                            <BookOpen className="h-5 w-5 mr-2" />
+                            Materia No Disponible
                           </>
                         ) : (
                           <>
@@ -316,10 +329,10 @@ const SubjectDetailPage: React.FC = () => {
                       <div className="flex justify-between">
                         <span>Duración:</span>
                         <span className="font-medium text-white">{getDurationByLevel(subject.nivel)}</span>
-                      </div>
+                      </div>    
                       <div className="flex justify-between">
                         <span>Estado:</span>
-                        <span className="font-medium text-green-400">
+                        <span className={`font-medium ${subject.estado === 1 ? 'text-green-400' : 'text-red-400'}`}>
                           {subject.estado === 1 ? 'Activa' : 'Inactiva'}
                         </span>
                       </div>
@@ -395,9 +408,16 @@ const SubjectDetailPage: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-red-600/20 border border-red-600/50 rounded-lg p-6"
+                className="bg-red-600/20 border border-red-600/50 rounded-lg p-6 shadow-lg"
               >
-                <p className="text-red-400 text-center font-medium">{error}</p>
+                <div className="flex items-center justify-center gap-3">
+                  <div className="p-2 rounded-full bg-red-600/30">
+                    <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <p className="text-red-400 text-center font-medium">{error}</p>
+                </div>
               </motion.div>
             )}
           </motion.div>
