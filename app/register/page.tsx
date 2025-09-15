@@ -24,6 +24,7 @@ const RegisterPage: React.FC = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm<RegisterFormInputs>();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
@@ -41,6 +42,8 @@ const RegisterPage: React.FC = () => {
         "¡Registro exitoso!",
         `✅ ${result.nombre} se registró correctamente`
       );
+
+      reset(); 
     } catch (error: unknown) {
       await showError(
         "Error en el registro", 
