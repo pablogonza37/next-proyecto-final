@@ -6,8 +6,8 @@ import { motion } from "framer-motion"
 import { signIn, useSession } from "next-auth/react"
 import { useSessionStore } from "@/app/zustand/stores/sessionStore"
 import { useRouter } from "next/navigation"
-import Swal from "sweetalert2"
-import "sweetalert2/dist/sweetalert2.min.css"
+import { showInvalidCredentials, showLoginSuccess, showServerError } from "@/lib/sweetalert"
+
 
 type LoginFormInputs = {
   email: string
@@ -45,31 +45,17 @@ const LoginPage: React.FC = () => {
       })
 
       if (res?.error) {
-        Swal.fire({
-          icon: "error",
-          title: "Credenciales inválidas",
-          timer: 2000,
-          showConfirmButton: false,
-        })
+
+        await showInvalidCredentials()
       } else {   
-        Swal.fire({
-          icon: "success",
-          title: "Usuario logueado correctamente",
-          timer: 2000,
-          showConfirmButton: false,
-        })
+        showLoginSuccess()
         setTimeout(() => {
           router.push("/")
         }, 2000)
       }
     } catch (err) {
       console.error(err)
-      Swal.fire({
-        icon: "error",
-        title: "Error en el servidor",
-        timer: 2000,
-        showConfirmButton: false,
-      })
+      await showServerError()
     }
   }
 

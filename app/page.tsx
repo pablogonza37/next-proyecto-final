@@ -1,16 +1,13 @@
 "use client"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { motion } from "framer-motion"
 import {
-  Search,
   Star,
   Users,
   BookOpen,
 } from "lucide-react"
 import StaffSection from "@/components/homepage/Staff/StaffSection"
 import SubjectsSection from "@/components/homepage/Subjects/SubjectsSection"
+import MateriaSearcher from "@/components/homepage/MateriaSearcher"
 
 export default function HomePage() {
   const fadeInUp = {
@@ -51,21 +48,7 @@ export default function HomePage() {
             contenido de calidad universitaria.
           </motion.p>
 
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
-              <Input
-                placeholder="Buscar materias..."
-                className="pl-10 bg-gray-800/80 border-gray-700 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-11 rounded-lg backdrop-blur-sm"
-              />
-            </div>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 h-11 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25">Buscar</Button>
-          </motion.div>
+          <MateriaSearcher className="mb-12" />
 
           <motion.div
             className="flex flex-wrap justify-center gap-8 text-gray-200"
