@@ -1,8 +1,13 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { motion } from "framer-motion"
+import { signIn, useSession } from "next-auth/react"
+import { useSessionStore } from "@/app/zustand/stores/sessionStore"
+import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
+import "sweetalert2/dist/sweetalert2.min.css"
 
 type LoginFormInputs = {
   email: string
@@ -11,15 +16,61 @@ type LoginFormInputs = {
 }
 
 const LoginPage: React.FC = () => {
+  const { data: session } = useSession()
+  const setSession = useSessionStore((state) => state.setSession)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session?.user) {
+      setSession(
+        session.user.nombreUsuario!,
+        session.user.nombreRol!,
+        session.backendToken!
+      )
+    }
+  }, [session, setSession])
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>()
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
-    console.log("Datos del login:", data)
-    
+  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      })
+
+      if (res?.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Credenciales inválidas",
+          timer: 2000,
+          showConfirmButton: false,
+        })
+      } else {   
+        Swal.fire({
+          icon: "success",
+          title: "Usuario logueado correctamente",
+          timer: 2000,
+          showConfirmButton: false,
+        })
+        setTimeout(() => {
+          router.push("/")
+        }, 2000)
+      }
+    } catch (err) {
+      console.error(err)
+      Swal.fire({
+        icon: "error",
+        title: "Error en el servidor",
+        timer: 2000,
+        showConfirmButton: false,
+      })
+    }
   }
 
   return (
@@ -30,6 +81,7 @@ const LoginPage: React.FC = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-md bg-gray-900/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-700"
       >
+        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white">Portal de Inscripción</h1>
           <p className="text-gray-400 text-sm mt-2">
@@ -37,9 +89,8 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        {/* 🔹 Formulario con react-hook-form */}
+        {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Email
@@ -61,7 +112,6 @@ const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Contraseña */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Contraseña
@@ -85,7 +135,6 @@ const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Recordarme + link */}
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center text-gray-400">
               <input
@@ -100,7 +149,6 @@ const LoginPage: React.FC = () => {
             </a>
           </div>
 
-          {/* Botón submit */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -115,7 +163,7 @@ const LoginPage: React.FC = () => {
         <p className="text-gray-400 text-xs text-center mt-6">
           ¿No tenes una cuenta?{" "}
           <a href="/register" className="text-blue-500 hover:underline">
-            Registrarte aqui
+            Registrarte aquí
           </a>
         </p>
         <p className="text-gray-400 text-xs text-center mt-6">

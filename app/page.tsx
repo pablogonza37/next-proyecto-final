@@ -35,6 +35,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      {/* Contenido principal */}
       <motion.section className="bg-gradient-to-b from-gray-800 to-black py-20" {...fadeIn}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2 className="text-5xl font-bold text-white mb-6" {...fadeInUp}>
@@ -89,43 +90,6 @@ export default function HomePage() {
       </motion.section>
 
       <SubjectsSection />
-
-      <motion.section
-        className="py-16 bg-gradient-to-br from-gray-800 via-gray-900 to-black"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h3
-            className="text-4xl font-bold text-white mb-8"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            Inscribite a las materias
-          </motion.h3>
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100 transition-all duration-300 hover:shadow-lg hover:shadow-white/20 font-semibold px-8 py-3 rounded-lg"
-              >
-                Ver todas las materias
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.section>
-
       <StaffSection />
     </div>
   )
