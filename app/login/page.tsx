@@ -8,6 +8,7 @@ import { useSessionStore } from "@/app/zustand/stores/sessionStore"
 import { useRouter } from "next/navigation"
 import { showInvalidCredentials, showLoginSuccess, showServerError } from "@/lib/sweetalert"
 
+
 type LoginFormInputs = {
   email: string
   password: string
@@ -44,6 +45,7 @@ const LoginPage: React.FC = () => {
       })
 
       if (res?.error) {
+
         await showInvalidCredentials()
       } else {   
         showLoginSuccess()

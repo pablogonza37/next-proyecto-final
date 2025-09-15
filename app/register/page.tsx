@@ -37,7 +37,6 @@ const RegisterPage: React.FC = () => {
         password: data.password,
         role: data.role || "alumno",
       });
-
       await showSuccess(
         "¡Registro exitoso!",
         `✅ ${result.nombre} se registró correctamente`

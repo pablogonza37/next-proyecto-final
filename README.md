@@ -26,7 +26,9 @@ Se conecta al backend vía API REST y maneja autenticación con **NextAuth**.
 
 ## Link Versión de producción 
 
+
 - [Vercel](https://next-proyecto-final.vercel.app/)
+
 
 ## Tecnologias / Herramientas 🛠
 
