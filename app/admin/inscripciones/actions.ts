@@ -52,7 +52,7 @@ export async function borrarInscripcion(id: string) {
 
 export async function nuevaInscripcion(data: dataInscripcionInterface) {
   try {
-    const res = await axios.post(`${API_URL}/inscripciones/nuevo`, data, {
+    const res = await axios.post(`${API_URL}/inscripciones`, data, {
       headers: { "Content-Type": "application/json" }
     });
     return res.data;
@@ -64,6 +64,31 @@ export async function nuevaInscripcion(data: dataInscripcionInterface) {
   }
 }
 
+export async function nuevaInscripcionCompleta(
+  nombreComision: string,
+  nombreMateria: string,
+  email: string,
+  fechaInscripcion: string
+) {
+  try {
+    const inscripcionData = {
+      nombreComision,
+      nombreMateria,
+      email,
+      fechaInscripcion
+    };
+
+    const res = await axios.post(`${API_URL}/inscripciones`, inscripcionData, {
+      headers: { "Content-Type": "application/json" }
+    });
+    return res.data;
+  } catch (error: any) {
+    console.error("Error al crear una nueva inscripción:", error.response?.data);
+    const mensaje = error.response?.data?.mensaje || "No se pudo crear la inscripción";
+    throw new Error(mensaje);
+  }
+}
+
 export async function obtenerMaterias(): Promise<dataMateriaInterface[]> {
   try {
     const res = await axios.get(`${API_URL}/materias`);
@@ -71,5 +96,15 @@ export async function obtenerMaterias(): Promise<dataMateriaInterface[]> {
   } catch (error) {
     console.error("Error al obtener las materias:", error);
     throw new Error("No se pudieron cargar las materias");
+  }
+}
+
+export async function obtenerMateriaPorId(id: string): Promise<dataMateriaInterface> {
+  try {
+    const res = await axios.get(`${API_URL}/materias/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error al obtener la materia:", error);
+    throw new Error("No se pudo cargar la materia");
   }
 }
