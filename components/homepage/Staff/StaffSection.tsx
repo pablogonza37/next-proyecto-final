@@ -89,8 +89,6 @@ function StaffSection() {
               name={member.name}
               imageSrc={member.imageSrc}
               linkedinUrl={member.linkedinUrl}
-              role={member.role}
-              description={member.description}
             />
           ))}
         </motion.div>

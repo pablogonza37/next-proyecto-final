@@ -103,7 +103,6 @@ const SubjectDetailPage: React.FC = () => {
         console.error("Error cargando materia:", error)
         let errorMessage = "No se pudo cargar la información de la materia"
         
-        // Error handler más específico
         if (error.message?.includes("network") || error.message?.includes("Network")) {
           errorMessage = "Error de conexión. Verifica tu conexión a internet."
         } else if (error.message?.includes("404") || error.message?.includes("not found")) {
@@ -116,7 +115,6 @@ const SubjectDetailPage: React.FC = () => {
         
         setError(errorMessage)
         
-        // Mostrar alerta de error más detallada
         Swal.fire({
           icon: "error",
           title: "Error al cargar la materia",
@@ -130,7 +128,6 @@ const SubjectDetailPage: React.FC = () => {
           cancelButtonColor: "#6b7280",
         }).then((result) => {
           if (result.isConfirmed) {
-            // Recargar la página para reintentar
             window.location.reload()
           } else if (result.isDismissed) {
             router.back()
@@ -168,9 +165,9 @@ const SubjectDetailPage: React.FC = () => {
               setEnrollmentMessage(null)
             }
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           setCanEnroll(true)
-          setEnrollmentMessage(null)
+          setEnrollmentMessage(err instanceof Error ? err.message : "No se pudo verificar la inscripción")
         } finally {
           setCheckingEnrollment(false)
         }
@@ -243,49 +240,7 @@ const SubjectDetailPage: React.FC = () => {
       }, 5000)
 
     } catch (err: unknown) {
-      const error = err as Error
-      let mensajeError = "No se pudo completar la inscripción"
-      let tipoError: 'error' | 'warning' | 'info' = 'error'
-      let mostrarContacto = false
-      
-      if (error.message.includes("ya está inscrito") || error.message.includes("already enrolled")) {
-        mensajeError = "Ya te encuentras inscrito en esta materia"
-        tipoError = 'info'
-      } else if (error.message.includes("no encontrado") || error.message.includes("not found")) {
-        mensajeError = "La materia no está disponible para inscripción"
-        mostrarContacto = true
-      } else if (error.message.includes("cupo") || error.message.includes("capacity")) {
-        mensajeError = "No hay cupos disponibles para esta comisión"
-        tipoError = 'warning'
-        mostrarContacto = true
-      } else if (error.message.includes("network") || error.message.includes("Network")) {
-        mensajeError = "Error de conexión. Verifica tu conexión a internet"
-        tipoError = 'warning'
-      } else if (error.message.includes("401") || error.message.includes("unauthorized")) {
-        mensajeError = "Tu sesión ha expirado. Serás redirigido al login"
-        tipoError = 'warning'
-      } else if (error.message) {
-        mensajeError = error.message
-      }
-      
-      Swal.fire({
-        icon: tipoError,
-        title: tipoError === 'info' ? 'Ya inscrito' : tipoError === 'warning' ? 'Atención' : 'Error de Inscripción',
-        text: mensajeError,
-        footer: mostrarContacto ? '<a href="/contactanos" class="text-blue-600 hover:underline">¿Necesitas ayuda? Contáctanos</a>' : undefined,
-        confirmButtonText: "Entendido",
-        confirmButtonColor: "#3b82f6",
-        timer: tipoError === 'info' ? 3000 : undefined,
-        timerProgressBar: tipoError === 'info' ? true : undefined,
-        showConfirmButton: tipoError !== 'info',
-      })
-      
-      if (error.message.includes("401") || error.message.includes("unauthorized")) {
-        setTimeout(() => {
-          router.push('/login')
-        }, 2000)
-      }
-      
+      const mensajeError = err instanceof Error ? err.message : "No se pudo completar la inscripción"      
       setError(mensajeError)
       
       setTimeout(() => {

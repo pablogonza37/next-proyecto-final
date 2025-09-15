@@ -12,7 +12,7 @@ const usuarioSchema = z.object({
   apellidoUsuario: z.string().min(3).max(40),
   dni: z.number().int().min(1).max(99999999),
   email: z.string().min(5).max(60).regex(/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/),
-  password: z.string().min(8), // opcional: podrías omitirlo en edición
+  password: z.string().min(8), 
   role: z.enum(["admin", "profesor", "alumno"]),
   estado: z.number()
 });
@@ -38,8 +38,8 @@ const UsuarioFormEditar = ({ usuario }: UsuarioFormEditarProps) => {
       const res = await actualizarUsuario(usuario._id, data);
       setMensaje(`Usuario "${res.nombre}" actualizado correctamente`);
       router.push("/admin/usuarios");
-    } catch (error: any) {
-      setMensaje(error.message || "Error al actualizar el usuario");
+    } catch (error: unknown) {
+      setMensaje(error instanceof Error ? error.message : "Error al actualizar el usuario");
     }
   };
 
@@ -82,7 +82,7 @@ const UsuarioFormEditar = ({ usuario }: UsuarioFormEditarProps) => {
                 id="role"
                 {...register("role")}
                 className="block w-full p-3 bg-gray-100 mt-3"
-                defaultValue={usuario?.role} // 👈 en edición marca el rol actual
+                defaultValue={usuario?.role} 
             >
             <option value="admin">Admin</option>
             <option value="profesor">Profesor</option>

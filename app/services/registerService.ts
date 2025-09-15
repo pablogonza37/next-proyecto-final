@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 
 export interface RegisterPayload {
   nombreUsuario: string
@@ -18,11 +18,10 @@ export const registerUser = async (data: RegisterPayload) => {
     })
 
     return res.data
-  } catch (error: any) {
-    // Axios guarda la respuesta del servidor en error.response
-    if (error.response && error.response.data) {
+  } catch (error: unknown) {
+    if (error instanceof AxiosError && error.response && error.response.data) {
       throw new Error(error.response.data.mensaje || "Error al registrar usuario")
     }
-    throw new Error(error.message || "Error al registrar usuario")
+    throw new Error(error instanceof Error ? error.message : "Error al registrar usuario")
   }
 }

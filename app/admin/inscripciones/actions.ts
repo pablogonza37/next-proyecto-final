@@ -1,7 +1,7 @@
 "use server";
 
 import { dataInscripcionInterface, dataMateriaInterface, verificacionInscripcionInterface } from "@/components/types/actions";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
 
@@ -10,7 +10,7 @@ export async function obtenerInscripciones() {
     const res = await axios.get(`${API_URL}/inscripciones`);
     return res.data;
   } catch (error) {
-    throw new Error("No se pudieron cargar las inscripciones");
+    throw new Error(error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudieron cargar las inscripciones" : "No se pudieron cargar las inscripciones");
   }
 }
 
@@ -28,8 +28,8 @@ export async function actualizarInscripcion(
       headers: { "Content-Type": "application/json" }
     });
     return res.data;
-  } catch (error: any) {
-    const mensaje = error.response?.data?.mensaje || "No se pudo actualizar la inscripción";
+  } catch (error: unknown) {
+    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo actualizar la inscripción" : "No se pudo actualizar la inscripción";
     throw new Error(mensaje);
   }
 }
@@ -40,8 +40,8 @@ export async function borrarInscripcion(id: string) {
       headers: { "Content-Type": "application/json" },
     });
     return res.data;
-  } catch (error: any) {
-    const mensaje = error.response?.data?.mensaje || "No se pudo borrar la inscripción";
+  } catch (error: unknown) {
+    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || error.response?.data?.error || "No se pudo borrar la inscripción" : "No se pudo borrar la inscripción";
     throw new Error(mensaje);
   }
 }
@@ -53,8 +53,8 @@ export async function nuevaInscripcion(data: dataInscripcionInterface) {
       headers: { "Content-Type": "application/json" }
     });
     return res.data;
-  } catch (error: any) {
-    const mensaje = error.response?.data?.mensaje || "No se pudo crear la inscripción";
+  } catch (error: unknown) {
+    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo crear la inscripción" : "No se pudo crear la inscripción";
     throw new Error(mensaje);
   }
 }
@@ -68,9 +68,7 @@ export async function nuevaInscripcionCompleta(
 ) {
   try {
     const usuario = await obtenerUsuarioPorEmail(email, token);
-    
-    const materia = await obtenerMateriaPorId(materiaId);
-    
+        
     const inscripcionData = {
       comision: comisionId,
       materia: materiaId,
@@ -85,8 +83,8 @@ export async function nuevaInscripcionCompleta(
       }
     });
     return res.data;
-  } catch (error: any) {
-    const mensaje = error.response?.data?.mensaje || error.response?.data?.error || "No se pudo crear la inscripción";
+  } catch (error: unknown) {
+    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || error.response?.data?.error || "No se pudo crear la inscripción" : "No se pudo crear la inscripción";
     throw new Error(mensaje);
   }
 }
@@ -97,13 +95,13 @@ export async function obtenerUsuarioPorEmail(email: string, token: string) {
       headers: { "x-token": token }
     });
     const usuarios = res.data;
-    const usuario = usuarios.find((u: any) => u.email === email);
+    const usuario = usuarios.find((u: { email: string; }) => u.email === email);
     if (!usuario) {
       throw new Error("Usuario no encontrado");
     }
     return usuario;
-  } catch (error) {
-    throw new Error("No se pudo obtener el usuario");
+  } catch (error: unknown) {
+    throw new Error(error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo obtener el usuario" : "No se pudo obtener el usuario");
   }
 }
 
@@ -132,8 +130,8 @@ export async function crearComisionAutomatica(nombreMateria: string, token: stri
       }
     });
     return res.data;
-  } catch (error: any) {
-    const mensaje = error.response?.data?.mensaje || "No se pudo crear la comisión";
+  } catch (error: unknown) {
+    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo crear la comisión" : "No se pudo crear la comisión";
     throw new Error(mensaje);
   }
 }
@@ -142,8 +140,8 @@ export async function obtenerMaterias(): Promise<dataMateriaInterface[]> {
   try {
     const res = await axios.get(`${API_URL}/materias`);
     return res.data;
-  } catch (error) {
-    throw new Error("No se pudieron cargar las materias");
+  } catch (error: unknown) {
+    throw new Error(error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudieron cargar las materias" : "No se pudieron cargar las materias");
   }
 }
 
@@ -151,8 +149,8 @@ export async function obtenerMateriaPorId(id: string): Promise<dataMateriaInterf
   try {
     const res = await axios.get(`${API_URL}/materias/${id}`);
     return res.data;
-  } catch (error) {
-    throw new Error("No se pudo cargar la materia");
+  } catch (error: unknown) {
+    throw new Error(error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo cargar la materia" : "No se pudo cargar la materia");
   }
 }
 
@@ -173,8 +171,8 @@ export async function verificarInscripcion(usuarioId: string, materiaId: string,
       }
     });
     return res.data;
-  } catch (error: any) {
-    const mensaje = error.response?.data?.mensaje || "No se pudo verificar la inscripción";
+  } catch (error: unknown) {
+    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo verificar la inscripción" : "No se pudo verificar la inscripción";
     throw new Error(mensaje);
   }
 }

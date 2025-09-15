@@ -9,8 +9,8 @@ const NuevComisionPage = async () => {
 
       const materias = await obtenerMaterias();
 
-      //Filtrar usuarios por rol "profesor"
       const usuarios = await obtenerUsuarios();
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const profesores = usuarios.filter((u:any) => u.role === "profesor" || u.role.nombreRol === "profesor");
 
   return (
