@@ -1,6 +1,6 @@
 "use server";
 
-import { dataInscripcionInterface, dataMateriaInterface } from "@/components/types/actions";
+import { dataInscripcionInterface, dataMateriaInterface, verificacionInscripcionInterface } from "@/components/types/actions";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4010/api";
@@ -159,4 +159,22 @@ export async function obtenerMateriaPorId(id: string): Promise<dataMateriaInterf
 export async function obtenerMateriasConComisiones(id: string) {
     const res = await axios.get(`${API_URL}/comisiones/materia/${id}`);
     return res.data;
+}
+
+export async function verificarInscripcion(usuarioId: string, materiaId: string, token: string): Promise<verificacionInscripcionInterface> {
+  try {
+    const res = await axios.post(`${API_URL}/inscripciones/verificar-inscripcion`, {
+      usuarioId,
+      materiaId
+    }, {
+      headers: { 
+        "Content-Type": "application/json",
+        "x-token": token
+      }
+    });
+    return res.data;
+  } catch (error: any) {
+    const mensaje = error.response?.data?.mensaje || "No se pudo verificar la inscripción";
+    throw new Error(mensaje);
+  }
 }
