@@ -91,7 +91,6 @@ const SubjectDetailPage: React.FC = () => {
         
         setError(errorMessage)
         
-        // Mostrar alerta de error más detallada
         showEnrollmentError(errorMessage).then((result) => {
           if (result.isConfirmed) {
             window.location.reload()
@@ -115,6 +114,7 @@ const SubjectDetailPage: React.FC = () => {
           const usuario = await obtenerUsuarioPorEmail(session.user.email, session.backendToken)
           const verificacion = await verificarInscripcion(usuario._id, subject._id, session.backendToken)
           
+          console.log(usuario._id,subject._id)
           if (verificacion.inscripto === false) {
             setCanEnroll(true)
             setEnrollmentMessage(null)
@@ -201,7 +201,39 @@ const SubjectDetailPage: React.FC = () => {
       }, 5000)
 
     } catch (err: unknown) {
-      const mensajeError = err instanceof Error ? err.message : "No se pudo completar la inscripción"      
+      const error = err as Error
+      let mensajeError = "No se pudo completar la inscripción"
+      let tipoError: 'error' | 'warning' | 'info' = 'error'
+      
+      if (error.message.includes("ya está inscrito") || error.message.includes("already enrolled")) {
+        mensajeError = "Ya te encuentras inscrito en esta materia"
+        tipoError = 'info'
+      } else if (error.message.includes("no encontrado") || error.message.includes("not found")) {
+        mensajeError = "La materia no está disponible para inscripción"
+      } else if (error.message.includes("cupo") || error.message.includes("capacity")) {
+        mensajeError = "No hay cupos disponibles para esta comisión"
+        tipoError = 'warning'
+      } else if (error.message.includes("network") || error.message.includes("Network")) {
+        mensajeError = "Error de conexión. Verifica tu conexión a internet"
+        tipoError = 'warning'
+      } else if (error.message.includes("401") || error.message.includes("unauthorized")) {
+        mensajeError = "Tu sesión ha expirado. Serás redirigido al login"
+        tipoError = 'warning'
+      } else if (error.message) {
+        mensajeError = error.message
+      }
+      
+      if (tipoError === 'info') {
+        showInfo('Ya inscrito', mensajeError)
+      } else {
+        showEnrollmentError(mensajeError)
+      }
+      
+      if (error.message.includes("401") || error.message.includes("unauthorized")) {
+        setTimeout(() => {
+          router.push('/login')
+        }, 2000)
+      }
       setError(mensajeError)
       
       setTimeout(() => {
