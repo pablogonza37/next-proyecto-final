@@ -299,7 +299,7 @@ const SubjectDetailPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen lg:min-h-fit bg-gray-900">
       <div className="relative h-80 sm:h-96 overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -313,8 +313,8 @@ const SubjectDetailPage: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
         </div>
         
-        <div className="relative z-10 flex flex-col justify-center h-72 sm:h-64 px-4 sm:px-6 md:px-12 lg:px-16 pt-0">
-          <div className="max-w-4xl mx-auto w-full">
+        <div className="relative z-10 flex flex-col justify-center h-72 sm:h-64 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 sm:pt-16 md:pt-20 lg:pt-24">
+          <div className="max-w-4xl mx-auto w-full mt-4 sm:mt-0">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -357,19 +357,21 @@ const SubjectDetailPage: React.FC = () => {
       </div>
 
       <div className="relative -mt-24 sm:-mt-20 z-20">
-        <div className="w-full mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+        <div className="w-full max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 xl:pt-10">
+            <div className="flex flex-col lg:flex-col-reverse gap-8 pt-8 sm:pt-0">
+            {/* Cards Section */}
             <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8 pt-8 sm:pt-0"
-          >
-            <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 shadow-2xl">
-              <CardContent className="p-8">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="text-center md:text-left">
-                    <h3 className="text-2xl font-bold text-white mb-2">¿Listo para comenzar?</h3>
-                    <p className="text-gray-400">Únete a miles de estudiantes que ya forman parte de esta materia</p>
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-8 lg:order-2"
+            >
+              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 shadow-2xl">
+              <CardContent className="p-8 xl:px-12 xl:py-6">
+                <div className="flex flex-col md:flex-row xl:flex-row items-center justify-between gap-6 xl:gap-12">
+                  <div className="text-center md:text-left xl:max-w-lg">
+                    <h3 className="text-2xl xl:text-3xl font-bold text-white mb-2 xl:mb-3">¿Listo para comenzar?</h3>
+                    <p className="text-gray-400 xl:text-lg">Únete a miles de estudiantes que ya forman parte de esta materia</p>
                     {status !== "authenticated" && (
                       <p className="text-sm text-blue-400 mt-2">
                         💡 Inicia sesión para inscribirte
@@ -380,7 +382,7 @@ const SubjectDetailPage: React.FC = () => {
                   <div className="flex flex-col gap-3">
                     {comisiones && comisiones.length > 0 && (
                       <Select onValueChange={setSelectedComision} defaultValue={selectedComision || undefined}>
-                        <SelectTrigger className="w-[220px] bg-gray-700 text-white border-gray-600 focus:ring-blue-500">
+                        <SelectTrigger className="w-[220px] xl:w-[280px] bg-gray-700 text-white border-gray-600 focus:ring-blue-500 xl:text-lg xl:py-3">
                           <SelectValue placeholder="Selecciona una comisión" />
                         </SelectTrigger>
                         <SelectContent className="bg-gray-800 border-gray-700 text-white">
@@ -472,20 +474,20 @@ const SubjectDetailPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <motion.div
+              {/* Details Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
+                <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
                 <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 xl:py-0">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-blue-600">
                         <GraduationCap className="h-6 w-6 text-white" />
                       </div>
-                      <h4 className="text-lg font-semibold text-white">Información Académica</h4>
+                      <h4 className="text-lg xl:text-xl font-semibold text-white">Información Académica</h4>
                     </div>
                     <div className="space-y-3 text-gray-400">
                       <div className="flex justify-between">
@@ -513,12 +515,12 @@ const SubjectDetailPage: React.FC = () => {
                 transition={{ delay: 0.4 }}
               >
                 <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 xl:py-0">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-blue-600">
                         <Calendar className="h-6 w-6 text-white" />
                       </div>
-                      <h4 className="text-lg font-semibold text-white">Detalles del Curso</h4>
+                      <h4 className="text-lg xl:text-xl font-semibold text-white">Detalles del Curso</h4>
                     </div>
                     <div className="space-y-3 text-gray-400">
                       <div className="flex justify-between">
@@ -544,12 +546,12 @@ const SubjectDetailPage: React.FC = () => {
                 transition={{ delay: 0.5 }}
               >
                 <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 xl:py-0">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-blue-600">
                         <Users className="h-6 w-6 text-white" />
                       </div>
-                      <h4 className="text-lg font-semibold text-white">Comunidad</h4>
+                      <h4 className="text-lg xl:text-xl font-semibold text-white">Comunidad</h4>
                     </div>
                     <div className="space-y-3 text-gray-400">
                       <div className="flex justify-between">
@@ -568,7 +570,14 @@ const SubjectDetailPage: React.FC = () => {
                   </CardContent>
                 </Card>
               </motion.div>
-            </div>
+              </div>
+
+              {/* Main Content Section - appears first in desktop due to flex-col-reverse */}
+              <div className="lg:order-1">
+                {/* This section can be used for additional main content if needed */}
+              </div>
+            </motion.div>
+          </div>
 
             {error && (
               <motion.div
@@ -586,10 +595,8 @@ const SubjectDetailPage: React.FC = () => {
                 </div>
               </motion.div>
             )}
-          </motion.div>
         </div>
         {/* Espaciado adicional en móviles antes del footer */}
-        <div className="pb-8"></div>
       </div>
     </div>
   )
