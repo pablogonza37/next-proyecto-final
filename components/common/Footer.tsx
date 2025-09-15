@@ -1,5 +1,3 @@
-"use cliente"
-
 import Link from "next/link"
 import {
   Twitter,
