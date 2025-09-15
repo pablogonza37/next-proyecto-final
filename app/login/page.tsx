@@ -90,6 +90,10 @@ const LoginPage: React.FC = () => {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: "Formato de email inválido",
                 },
+                maxLength: {
+                  value: 200,
+                  message: "Debe tener como maximo 200 caracteres",
+                },
               })}
               className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 placeholder-gray-500 border border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
             />
@@ -110,6 +114,10 @@ const LoginPage: React.FC = () => {
                 minLength: {
                   value: 6,
                   message: "Debe tener al menos 6 caracteres",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Debe tener como maximo 30 caracteres",
                 },
               })}
               className="w-full px-4 py-3 rounded-xl bg-gray-800 text-gray-200 placeholder-gray-500 border border-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
