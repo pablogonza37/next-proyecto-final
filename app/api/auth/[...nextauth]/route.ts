@@ -36,6 +36,7 @@ const handler = NextAuth({
         token.backendToken = u.token
         token.nombreUsuario = u.nombreUsuario
         token.email = u.email
+        token.rol = u.rol?.nombreRol
       }
       return token
     },
@@ -45,6 +46,7 @@ const handler = NextAuth({
       s.user.email = t.email
       s.user.nombreUsuario = t.nombreUsuario
       s.backendToken = t.backendToken
+      s.user.nombreRol = t.rol
       return s
     },
   },

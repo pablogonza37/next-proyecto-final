@@ -4,10 +4,17 @@ import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import Swal from "sweetalert2"
 import "sweetalert2/dist/sweetalert2.min.css"
+import Loader from "../ui/Loader"
 
 export const Navbar = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+
+   if (status === "loading") {
+    return <Loader />
+  }
+
   const nombreUsuario = session?.user?.nombreUsuario
+  const nombreRol = session?.user?.nombreRol
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/" })
@@ -47,6 +54,13 @@ export const Navbar = () => {
                 <span className="text-gray-200 px-4 py-2">
                   Hola, {nombreUsuario}
                 </span>
+                
+                {
+                  nombreRol === 'admin' && (
+                    <Link href="/admin/roles" className="px-4 py-2 border border-gray-700 text-gray-200 hover:bg-gray-700 bg-transparent rounded-md transition-colors">Panel de Administración</Link>
+                  )
+                }
+                  
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 border border-gray-700 text-gray-200 hover:bg-gray-700 bg-transparent rounded-md transition-colors"

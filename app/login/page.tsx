@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
     if (session?.user) {
       setSession(
         session.user.nombreUsuario!,
-        session.user.rol!,
+        session.user.nombreRol!,
         session.backendToken!
       )
     }
