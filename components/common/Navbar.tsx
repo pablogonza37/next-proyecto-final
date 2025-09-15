@@ -35,6 +35,13 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <Link
+              href="/plandeestudios"
+              className="px-4 py-2 text-gray-200 hover:bg-gray-700 bg-transparent rounded-md transition-colors"
+            >
+              Plan de Estudio
+            </Link>
+            
             {nombreUsuario ? (
               <>
                 <span className="text-gray-200 px-4 py-2">
