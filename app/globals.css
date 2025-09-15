@@ -246,29 +246,21 @@ body {
   @apply bg-gray-200 hover:bg-gray-300 font-bold text-xl text-black py-3 px-5 rounded transition-all cursor-pointer;
 }
 
-/* ========================================
-   SWEETALERT 2 CUSTOM THEME
-   ======================================== */
-
-/* SweetAlert2 overlay */
 .swal2-container {
   backdrop-filter: blur(8px) !important;
-  background-color: rgba(17, 24, 39, 0.75) !important; /* gray-900 with opacity */
+  background-color: rgba(17, 24, 39, 0.75) !important;
 }
 
-/* Main popup styling */
 .swal2-popup {
-  background: linear-gradient(145deg, #1f2937 0%, #111827 100%) !important; /* gray-800 to gray-900 */
-  border: 1px solid #374151 !important; /* gray-700 */
-  border-radius: 0.75rem !important; /* 12px */
+  background: linear-gradient(145deg, #1f2937 0%, #111827 100%) !important;
+  border: 1px solid #374151 !important;
+  border-radius: 0.75rem !important;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2), 
-              0 0 0 1px rgba(59, 130, 246, 0.1) !important; /* Enhanced shadow with blue accent */
+              0 0 0 1px rgba(59, 130, 246, 0.1) !important;
   padding: 2rem !important;
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
-  color: #f9fafb !important; /* gray-50 */
-}
+  color: #f9fafb !important; }
 
-/* Title styling */
 .swal2-title {
   color: #ffffff !important;
   font-size: 1.5rem !important;
@@ -278,21 +270,19 @@ body {
   line-height: 1.2 !important;
 }
 
-/* Content text */
 .swal2-html-container {
-  color: #d1d5db !important; /* gray-300 */
+  color: #d1d5db !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
   margin: 1rem 0 !important;
 }
 
-/* Icon styling */
 .swal2-icon {
   margin: 1rem auto !important;
 }
 
 .swal2-icon.swal2-success {
-  border-color: #10b981 !important; /* emerald-500 */
+  border-color: #10b981 !important;
   color: #10b981 !important;
 }
 
@@ -305,7 +295,7 @@ body {
 }
 
 .swal2-icon.swal2-error {
-  border-color: #ef4444 !important; /* red-500 */
+  border-color: #ef4444 !important;
   color: #ef4444 !important;
 }
 
@@ -314,44 +304,36 @@ body {
 }
 
 .swal2-icon.swal2-warning {
-  border-color: #f59e0b !important; /* amber-500 */
+  border-color: #f59e0b !important;
   color: #f59e0b !important;
 }
 
 .swal2-icon.swal2-info {
-  border-color: #3b82f6 !important; /* blue-500 */
-  color: #3b82f6 !important;
+  border-color: #3b82f6 !important;   color: #3b82f6 !important;
 }
 
 .swal2-icon.swal2-question {
-  border-color: #8b5cf6 !important; /* violet-500 */
-  color: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;   color: #8b5cf6 !important;
 }
 
-/* Buttons container */
 .swal2-actions {
   margin: 2rem 0 0 0 !important;
   gap: 1rem !important;
 }
 
-/* Confirm button */
 .swal2-confirm {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important; /* blue-500 to blue-600 */
-  border: none !important;
-  border-radius: 0.5rem !important; /* 8px */
-  padding: 0.75rem 1.5rem !important;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;   border: none !important;
+  border-radius: 0.5rem !important;   padding: 0.75rem 1.5rem !important;
   font-size: 1rem !important;
   font-weight: 600 !important;
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
   color: #ffffff !important;
   cursor: pointer !important;
   transition: all 0.2s ease-in-out !important;
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.25) !important; /* blue shadow */
-}
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.25) !important; }
 
 .swal2-confirm:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important; /* blue-600 to blue-700 */
-  transform: translateY(-1px) !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;   transform: translateY(-1px) !important;
   box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.3) !important;
 }
 
@@ -359,24 +341,19 @@ body {
   transform: translateY(0) !important;
 }
 
-/* Cancel button */
 .swal2-cancel {
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important; /* gray-500 to gray-600 */
-  border: none !important;
-  border-radius: 0.5rem !important; /* 8px */
-  padding: 0.75rem 1.5rem !important;
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;   border: none !important;
+  border-radius: 0.5rem !important;   padding: 0.75rem 1.5rem !important;
   font-size: 1rem !important;
   font-weight: 600 !important;
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
   color: #ffffff !important;
   cursor: pointer !important;
   transition: all 0.2s ease-in-out !important;
-  box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.25) !important; /* gray shadow */
-}
+  box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.25) !important; }
 
 .swal2-cancel:hover {
-  background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important; /* gray-600 to gray-700 */
-  transform: translateY(-1px) !important;
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%) !important;   transform: translateY(-1px) !important;
   box-shadow: 0 6px 8px -1px rgba(107, 114, 128, 0.3) !important;
 }
 
@@ -384,10 +361,8 @@ body {
   transform: translateY(0) !important;
 }
 
-/* Deny button (for three-button modals) */
 .swal2-deny {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important; /* red-500 to red-600 */
-  border: none !important;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;   border: none !important;
   border-radius: 0.5rem !important;
   padding: 0.75rem 1.5rem !important;
   font-size: 1rem !important;
@@ -400,74 +375,53 @@ body {
 }
 
 .swal2-deny:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important; /* red-600 to red-700 */
-  transform: translateY(-1px) !important;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;   transform: translateY(-1px) !important;
   box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.3) !important;
 }
 
-/* Progress bar for timed alerts */
 .swal2-timer-progress-bar {
-  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%) !important; /* blue gradient */
-  height: 3px !important;
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%) !important;   height: 3px !important;
 }
 
 .swal2-timer-progress-bar-container {
-  background: #374151 !important; /* gray-700 */
-  height: 3px !important;
+  background: #374151 !important;   height: 3px !important;
 }
 
-/* Input fields */
 .swal2-input, .swal2-textarea {
-  background: #374151 !important; /* gray-700 */
-  border: 1px solid #4b5563 !important; /* gray-600 */
-  border-radius: 0.5rem !important;
-  color: #f9fafb !important; /* gray-50 */
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
+  background: #374151 !important;   border: 1px solid #4b5563 !important;   border-radius: 0.5rem !important;
+  color: #f9fafb !important;   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
   padding: 0.75rem !important;
   margin: 0.5rem 0 !important;
 }
 
 .swal2-input:focus, .swal2-textarea:focus {
-  border-color: #3b82f6 !important; /* blue-500 */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  border-color: #3b82f6 !important;   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
   outline: none !important;
 }
 
 .swal2-input::placeholder, .swal2-textarea::placeholder {
-  color: #9ca3af !important; /* gray-400 */
-}
+  color: #9ca3af !important; }
 
-/* Select dropdown */
 .swal2-select {
-  background: #374151 !important; /* gray-700 */
-  border: 1px solid #4b5563 !important; /* gray-600 */
-  border-radius: 0.5rem !important;
-  color: #f9fafb !important; /* gray-50 */
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
+  background: #374151 !important;   border: 1px solid #4b5563 !important;   border-radius: 0.5rem !important;
+  color: #f9fafb !important;   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
   padding: 0.75rem !important;
   margin: 0.5rem 0 !important;
 }
 
 .swal2-select:focus {
-  border-color: #3b82f6 !important; /* blue-500 */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  border-color: #3b82f6 !important;   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
   outline: none !important;
 }
 
-/* Validation message */
 .swal2-validation-message {
-  background: #fef2f2 !important; /* red-50 */
-  color: #dc2626 !important; /* red-600 */
-  border: 1px solid #fecaca !important; /* red-200 */
-  border-radius: 0.375rem !important;
+  background: #fef2f2 !important;   color: #dc2626 !important;   border: 1px solid #fecaca !important;   border-radius: 0.375rem !important;
   padding: 0.5rem !important;
   margin: 0.5rem 0 !important;
 }
 
-/* Close button */
 .swal2-close {
-  color: #9ca3af !important; /* gray-400 */
-  font-size: 1.5rem !important;
+  color: #9ca3af !important;   font-size: 1.5rem !important;
   font-weight: 300 !important;
   background: none !important;
   border: none !important;
@@ -480,7 +434,6 @@ body {
   color: #ffffff !important;
 }
 
-/* Toast positioning */
 .swal2-top-end {
   top: 2rem !important;
   right: 2rem !important;
@@ -491,63 +444,35 @@ body {
   left: 2rem !important;
 }
 
-/* ========================================
-   TOASTS CON ICONOS VISIBLES - TEMA ORIGINAL
-   ======================================== */
-
-/* Mejoras específicas para iconos de toasts manteniendo el tema de la página */
-
-/* Icono de éxito más visible en toasts */
 .swal2-container .swal2-toast .swal2-icon.swal2-success {
-  border-color: #10b981 !important; /* emerald-500 más brillante */
-  background: rgba(16, 185, 129, 0.1) !important; /* Fondo sutil verde */
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2), 
-              0 4px 8px rgba(16, 185, 129, 0.3) !important; /* Glow verde */
-}
+  border-color: #10b981 !important;   background: rgba(16, 185, 129, 0.1) !important;   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2), 
+              0 4px 8px rgba(16, 185, 129, 0.3) !important; }
 
 .swal2-container .swal2-toast .swal2-icon.swal2-success [class^='swal2-success-line'] {
-  background-color: #10b981 !important; /* Check más brillante */
-  box-shadow: 0 0 4px rgba(16, 185, 129, 0.6) !important; /* Glow en el check */
-}
+  background-color: #10b981 !important;   box-shadow: 0 0 4px rgba(16, 185, 129, 0.6) !important; }
 
 .swal2-container .swal2-toast .swal2-icon.swal2-success .swal2-success-ring {
-  border-color: #10b981 !important; /* Anillo más brillante */
-  border-width: 2px !important;
+  border-color: #10b981 !important;   border-width: 2px !important;
 }
 
-/* Icono de error más visible en toasts */
 .swal2-container .swal2-toast .swal2-icon.swal2-error {
-  border-color: #ef4444 !important; /* red-500 más brillante */
-  background: rgba(239, 68, 68, 0.1) !important; /* Fondo sutil rojo */
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2), 
-              0 4px 8px rgba(239, 68, 68, 0.3) !important; /* Glow rojo */
-}
+  border-color: #ef4444 !important;   background: rgba(239, 68, 68, 0.1) !important;   box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2), 
+              0 4px 8px rgba(239, 68, 68, 0.3) !important; }
 
 .swal2-container .swal2-toast .swal2-icon.swal2-error .swal2-x-mark {
-  background: none !important; /* Sin fondo para la X */
-}
+  background: none !important; }
 
 .swal2-container .swal2-toast .swal2-icon.swal2-error .swal2-x-mark .swal2-x-mark-line-left,
 .swal2-container .swal2-toast .swal2-icon.swal2-error .swal2-x-mark .swal2-x-mark-line-right {
-  background-color: #ef4444 !important; /* X más brillante */
-  box-shadow: 0 0 4px rgba(239, 68, 68, 0.6) !important; /* Glow en la X */
-  height: 3px !important; /* Líneas más gruesas */
-  border-radius: 2px !important; /* Bordes redondeados */
-}
+  background-color: #ef4444 !important;   box-shadow: 0 0 4px rgba(239, 68, 68, 0.6) !important;   height: 3px !important;   border-radius: 2px !important; }
 
-/* Mejoras generales para toasts manteniendo el tema de la página */
 .swal2-container .swal2-toast {
-  background: linear-gradient(145deg, #1f2937 0%, #111827 100%) !important; /* Fondo original de la página */
-  border: 1px solid #374151 !important; /* Border original */
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 
+  background: linear-gradient(145deg, #1f2937 0%, #111827 100%) !important;   border: 1px solid #374151 !important;   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 
               0 10px 10px -5px rgba(0, 0, 0, 0.2), 
-              0 0 0 1px rgba(59, 130, 246, 0.1) !important; /* Sombra original con acento azul */
-  color: #f9fafb !important; /* Texto original */
-  min-width: 300px !important;
+              0 0 0 1px rgba(59, 130, 246, 0.1) !important;   color: #f9fafb !important;   min-width: 300px !important;
   max-width: 400px !important;
 }
 
-/* Título de toast con el estilo de la página */
 .swal2-container .swal2-toast .swal2-title {
   color: #ffffff !important;
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
@@ -556,26 +481,20 @@ body {
   line-height: 1.2 !important;
 }
 
-/* Contenido de toast con el estilo de la página */
 .swal2-container .swal2-toast .swal2-html-container {
-  color: #d1d5db !important; /* gray-300 original */
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
+  color: #d1d5db !important;   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif !important;
   font-size: 0.875rem !important;
   line-height: 1.5 !important;
 }
 
-/* Barra de progreso con estilo de la página */
 .swal2-container .swal2-toast .swal2-timer-progress-bar {
-  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%) !important; /* Azul original */
-  height: 3px !important;
+  background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%) !important;   height: 3px !important;
 }
 
 .swal2-container .swal2-toast .swal2-timer-progress-bar-container {
-  background: #374151 !important; /* gray-700 original */
-  height: 3px !important;
+  background: #374151 !important;   height: 3px !important;
 }
 
-/* Hover effect sutil manteniendo el tema */
 .swal2-container .swal2-toast:hover {
   transform: translateX(-2px) !important;
   box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.5), 
@@ -584,7 +503,6 @@ body {
   transition: all 0.2s ease-out !important;
 }
 
-/* Responsive para toasts */
 @media (max-width: 768px) {
   .swal2-container .swal2-toast {
     min-width: calc(100vw - 2rem) !important;

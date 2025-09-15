@@ -1,19 +1,10 @@
 import Swal, { SweetAlertIcon, SweetAlertResult } from 'sweetalert2'
 
-// ========================================
-// SWEETALERT UTILITY - AULA LINK THEME
-// ========================================
-
-/**
- * Configuración base para todos los SweetAlerts
- * Mantiene consistencia con el tema de la página
- */
 const baseConfig = {
-  // Configuraciones globales por defecto
   allowOutsideClick: false,
   allowEscapeKey: true,
-  buttonsStyling: false, // Usamos nuestros estilos CSS personalizados
-  reverseButtons: true, // Botón confirmar a la derecha
+  buttonsStyling: false,
+  reverseButtons: true,
   focusConfirm: true,
   showClass: {
     popup: 'animate__animated animate__fadeInDown animate__faster'
@@ -23,47 +14,37 @@ const baseConfig = {
   }
 }
 
-/**
- * Configuraciones específicas por tipo de alerta
- */
 const typeConfigs = {
   success: {
-    iconColor: '#10b981', // emerald-500
+    iconColor: '#10b981',
     timer: 3000,
     timerProgressBar: true,
     showConfirmButton: false,
   },
   error: {
-    iconColor: '#ef4444', // red-500
+    iconColor: '#ef4444',
     confirmButtonText: 'Entendido',
     showConfirmButton: true,
   },
   warning: {
-    iconColor: '#f59e0b', // amber-500
+    iconColor: '#f59e0b',
     confirmButtonText: 'Confirmar',
     cancelButtonText: 'Cancelar',
     showCancelButton: true,
   },
   info: {
-    iconColor: '#3b82f6', // blue-500
+    iconColor: '#3b82f6',
     confirmButtonText: 'Ok',
     showConfirmButton: true,
   },
   question: {
-    iconColor: '#8b5cf6', // violet-500
+    iconColor: '#8b5cf6',
     confirmButtonText: 'Sí',
     cancelButtonText: 'No',
     showCancelButton: true,
   }
 }
 
-// ========================================
-// FUNCIONES DE ALERTAS TIPADAS
-// ========================================
-
-/**
- * Alerta de éxito - Auto-cerrable
- */
 export const showSuccess = (title: string, text?: string, timer?: number): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -75,9 +56,6 @@ export const showSuccess = (title: string, text?: string, timer?: number): Promi
   })
 }
 
-/**
- * Alerta de error - Requiere confirmación
- */
 export const showError = (title: string, text?: string): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -88,9 +66,6 @@ export const showError = (title: string, text?: string): Promise<SweetAlertResul
   })
 }
 
-/**
- * Alerta de advertencia - Con opción de cancelar
- */
 export const showWarning = (title: string, text?: string): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -101,9 +76,6 @@ export const showWarning = (title: string, text?: string): Promise<SweetAlertRes
   })
 }
 
-/**
- * Alerta de información
- */
 export const showInfo = (title: string, text?: string): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -114,9 +86,6 @@ export const showInfo = (title: string, text?: string): Promise<SweetAlertResult
   })
 }
 
-/**
- * Alerta de pregunta/confirmación
- */
 export const showQuestion = (title: string, text?: string): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -127,13 +96,6 @@ export const showQuestion = (title: string, text?: string): Promise<SweetAlertRe
   })
 }
 
-// ========================================
-// FUNCIONES ESPECÍFICAS DEL NEGOCIO
-// ========================================
-
-/**
- * Confirmación de eliminación - Para BotonBorrar
- */
 export const confirmDelete = (itemName: string): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -143,13 +105,10 @@ export const confirmDelete = (itemName: string): Promise<SweetAlertResult> => {
     confirmButtonText: 'Sí, eliminar',
     cancelButtonText: 'Cancelar',
     showCancelButton: true,
-    confirmButtonColor: '#ef4444', // red-500 - override para eliminación
+    confirmButtonColor: '#ef4444',
   })
 }
 
-/**
- * Toast de éxito en esquina superior derecha
- */
 export const showToastSuccess = (title: string, text?: string): void => {
   Swal.fire({
     ...baseConfig,
@@ -170,9 +129,6 @@ export const showToastSuccess = (title: string, text?: string): void => {
   })
 }
 
-/**
- * Toast de error en esquina superior derecha
- */
 export const showToastError = (title: string, text?: string): void => {
   Swal.fire({
     ...baseConfig,
@@ -193,9 +149,6 @@ export const showToastError = (title: string, text?: string): void => {
   })
 }
 
-/**
- * Confirmación de logout
- */
 export const confirmLogout = (): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -208,9 +161,6 @@ export const confirmLogout = (): Promise<SweetAlertResult> => {
   })
 }
 
-/**
- * Alerta para credenciales inválidas
- */
 export const showInvalidCredentials = (): Promise<SweetAlertResult> => {
   return showError(
     'Credenciales inválidas',
@@ -218,23 +168,14 @@ export const showInvalidCredentials = (): Promise<SweetAlertResult> => {
   )
 }
 
-/**
- * Alerta de login exitoso
- */
 export const showLoginSuccess = (): void => {
   showToastSuccess('¡Bienvenido!', 'Has iniciado sesión correctamente')
 }
 
-/**
- * Alerta de logout exitoso  
- */
 export const showLogoutSuccess = (): void => {
   showToastSuccess('Sesión cerrada', 'Has cerrado sesión correctamente')
 }
 
-/**
- * Alerta de error del servidor
- */
 export const showServerError = (message?: string): Promise<SweetAlertResult> => {
   return showError(
     'Error del servidor',
@@ -242,9 +183,6 @@ export const showServerError = (message?: string): Promise<SweetAlertResult> => 
   )
 }
 
-/**
- * Confirmación de inscripción a materia
- */
 export const confirmSubjectEnrollment = (subjectName: string): Promise<SweetAlertResult> => {
   return Swal.fire({
     ...baseConfig,
@@ -257,23 +195,13 @@ export const confirmSubjectEnrollment = (subjectName: string): Promise<SweetAler
   })
 }
 
-/**
- * Alerta de inscripción exitosa
- */
 export const showEnrollmentSuccess = (subjectName: string): void => {
   showToastSuccess('¡Inscripción exitosa!', `Te has inscrito a "${subjectName}"`)
 }
 
-/**
- * Alerta de error de inscripción
- */
 export const showEnrollmentError = (message: string): Promise<SweetAlertResult> => {
   return showError('Error de inscripción', message)
 }
-
-// ========================================
-// EXPORTACIÓN POR DEFECTO
-// ========================================
 
 const sweetAlert = {
   success: showSuccess,

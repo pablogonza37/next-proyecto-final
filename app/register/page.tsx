@@ -37,28 +37,15 @@ const RegisterPage: React.FC = () => {
         role: data.role || "alumno",
       });
 
-<<<<<<< HEAD
       await showSuccess(
         "¡Registro exitoso!",
         `✅ ${result.nombre} se registró correctamente`
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       await showError(
         "Error en el registro", 
-        `❌ ${error.message}`
-=======
-      Swal.fire({
-        icon: "success",
-        title: "Usuario creado",
-        text: `✅ ${result.nombre} se registró correctamente`,
-      });
-    } catch (error: unknown) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `❌ ${error instanceof Error ? error.message : "Error al registrar usuario"}`,
->>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
-      });
+        `❌ ${error instanceof Error ? error.message : 'Error desconocido'}`
+      );
     }
   };
 
