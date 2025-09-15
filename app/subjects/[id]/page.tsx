@@ -7,11 +7,13 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Loader from "@/components/ui/Loader"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star } from "lucide-react"
+import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star, AlertCircle } from "lucide-react"
 import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones } from "@/app/admin/inscripciones/actions"
 import { useSession } from "next-auth/react"
 import { useRouter as useNextRouter } from "next/navigation"
 import Image from "next/image"
+import Swal from "sweetalert2"
+import "sweetalert2/dist/sweetalert2.min.css"
 
 interface Subject {
   _id: string
@@ -59,18 +61,87 @@ const SubjectDetailPage: React.FC = () => {
         const comisionesData = await obtenerMateriasConComisiones(id)
         setSubject(materiaData)
         setComisiones(comisionesData)
+        
+        // Manejo mejorado de comisiones disponibles
         if (comisionesData && comisionesData.length > 0) {
           setSelectedComision(comisionesData[0]._id)
+        } else {
+          // Mostrar alerta informativa sobre comisiones no disponibles
+          setTimeout(() => {
+            Swal.fire({
+              icon: "info",
+              title: "Comisiones no disponibles",
+              html: `
+                <div class="text-left">
+                  <p class="mb-3">Actualmente no hay comisiones disponibles para <strong>${materiaData.nombreMateria}</strong>.</p>
+                  <p class="mb-2">Esto puede ocurrir por:</p>
+                  <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
+                    <li>Las comisiones aún no han sido programadas</li>
+                    <li>Todas las comisiones están completas</li>
+                    <li>El período de inscripciones ha finalizado</li>
+                  </ul>
+                  <p class="mt-3 text-sm">Te recomendamos contactar con la administración o volver más tarde.</p>
+                </div>
+              `,
+              showCloseButton: true,
+              showCancelButton: true,
+              confirmButtonText: "Contactar Administración",
+              cancelButtonText: "Entendido",
+              confirmButtonColor: "#3b82f6",
+              cancelButtonColor: "#6b7280",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Redirigir a página de contacto
+                router.push('/contactanos')
+              }
+            })
+          }, 1000)
         }
-      } catch (err) {
-        setError("No se pudo cargar la información de la materia")
+      } catch (err: unknown) {
+        const error = err as Error
+        console.error("Error cargando materia:", error)
+        let errorMessage = "No se pudo cargar la información de la materia"
+        
+        // Error handler más específico
+        if (error.message?.includes("network") || error.message?.includes("Network")) {
+          errorMessage = "Error de conexión. Verifica tu conexión a internet."
+        } else if (error.message?.includes("404") || error.message?.includes("not found")) {
+          errorMessage = "La materia solicitada no existe."
+        } else if (error.message?.includes("500")) {
+          errorMessage = "Error interno del servidor. Intenta nuevamente más tarde."
+        } else if (error.message) {
+          errorMessage = error.message
+        }
+        
+        setError(errorMessage)
+        
+        // Mostrar alerta de error más detallada
+        Swal.fire({
+          icon: "error",
+          title: "Error al cargar la materia",
+          text: errorMessage,
+          footer: '<a href="/contactanos">¿Necesitas ayuda? Contáctanos</a>',
+          showConfirmButton: true,
+          confirmButtonText: "Reintentar",
+          showCancelButton: true,
+          cancelButtonText: "Volver",
+          confirmButtonColor: "#3b82f6",
+          cancelButtonColor: "#6b7280",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Recargar la página para reintentar
+            window.location.reload()
+          } else if (result.isDismissed) {
+            router.back()
+          }
+        })
       } finally {
         setLoading(false)
       }
     }
 
     cargarMateria()
-  }, [id])
+  }, [id, router])
 
   const getDurationByLevel = (nivel: string): string => {
     const nivelNum = parseInt(nivel)
@@ -100,11 +171,14 @@ const SubjectDetailPage: React.FC = () => {
       return
     }
 
-    if (!selectedComision) {
-      setError("Por favor, selecciona una comisión para inscribirte.")
-      setTimeout(() => {
-        setError(null)
-      }, 7000)
+    if (!selectedComision || !comisiones || comisiones.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Comisión requerida",
+        text: "Por favor, selecciona una comisión para inscribirte.",
+        confirmButtonText: "Entendido",
+        confirmButtonColor: "#3b82f6",
+      })
       return
     }
 
@@ -128,24 +202,50 @@ const SubjectDetailPage: React.FC = () => {
         setInscriptionSuccess(false)
       }, 5000)
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as Error
       let mensajeError = "No se pudo completar la inscripción"
+      let tipoError: 'error' | 'warning' | 'info' = 'error'
+      let mostrarContacto = false
       
-      if (err.message.includes("ya está inscrito") || err.message.includes("already enrolled")) {
+      if (error.message.includes("ya está inscrito") || error.message.includes("already enrolled")) {
         mensajeError = "Ya te encuentras inscrito en esta materia"
-      } else if (err.message.includes("no encontrado") || err.message.includes("not found")) {
+        tipoError = 'info'
+      } else if (error.message.includes("no encontrado") || error.message.includes("not found")) {
         mensajeError = "La materia no está disponible para inscripción"
-      } else if (err.message.includes("cupo") || err.message.includes("capacity")) {
-        mensajeError = "No hay cupos disponibles para esta materia"
-      } else if (err.message.includes("network") || err.message.includes("Network")) {
-        mensajeError = "Error de conexión. Por favor, intenta nuevamente"
-      } else if (err.message.includes("401") || err.message.includes("unauthorized")) {
-        mensajeError = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente"
+        mostrarContacto = true
+      } else if (error.message.includes("cupo") || error.message.includes("capacity")) {
+        mensajeError = "No hay cupos disponibles para esta comisión"
+        tipoError = 'warning'
+        mostrarContacto = true
+      } else if (error.message.includes("network") || error.message.includes("Network")) {
+        mensajeError = "Error de conexión. Verifica tu conexión a internet"
+        tipoError = 'warning'
+      } else if (error.message.includes("401") || error.message.includes("unauthorized")) {
+        mensajeError = "Tu sesión ha expirado. Serás redirigido al login"
+        tipoError = 'warning'
+      } else if (error.message) {
+        mensajeError = error.message
+      }
+      
+      // Usar SweetAlert para mostrar errores de inscripción
+      Swal.fire({
+        icon: tipoError,
+        title: tipoError === 'info' ? 'Ya inscrito' : tipoError === 'warning' ? 'Atención' : 'Error de Inscripción',
+        text: mensajeError,
+        footer: mostrarContacto ? '<a href="/contactanos" class="text-blue-600 hover:underline">¿Necesitas ayuda? Contáctanos</a>' : undefined,
+        confirmButtonText: "Entendido",
+        confirmButtonColor: "#3b82f6",
+        timer: tipoError === 'info' ? 3000 : undefined,
+        timerProgressBar: tipoError === 'info' ? true : undefined,
+        showConfirmButton: tipoError !== 'info',
+      })
+      
+      // Manejar redirección para error 401
+      if (error.message.includes("401") || error.message.includes("unauthorized")) {
         setTimeout(() => {
           nextRouter.push('/login')
         }, 2000)
-      } else if (err.message) {
-        mensajeError = err.message
       }
       
       setError(mensajeError)
@@ -293,9 +393,28 @@ const SubjectDetailPage: React.FC = () => {
                     )}
 
                     {(!comisiones || comisiones.length === 0) && (
-                      <p className="text-sm text-red-400 mt-2 text-center md:text-right">
-                        ⚠️ No hay comisiones disponibles para esta materia.
-                      </p>
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-yellow-900/30 border border-yellow-600/50 rounded-lg p-4 mt-3"
+                      >
+                        <div className="flex items-center gap-3 text-yellow-400">
+                          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                          <div className="text-sm">
+                            <p className="font-medium mb-1">No hay comisiones disponibles</p>
+                            <p className="text-yellow-300/80 text-xs">
+                              Contacta con la administración o vuelve más tarde
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => router.push('/contactanos')}
+                          className="mt-3 w-full bg-yellow-600 hover:bg-yellow-700 text-white text-sm py-2"
+                        >
+                          <Users className="h-4 w-4 mr-2" />
+                          Contactar Administración
+                        </Button>
+                      </motion.div>
                     )}
 
                     {inscriptionSuccess ? (
