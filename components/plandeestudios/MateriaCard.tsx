@@ -17,11 +17,11 @@ const MateriaCard: React.FC<MateriaCardProps> = ({ materia, onClick }) => (
     className="cursor-pointer"
     onClick={() => onClick(materia)}
   >
-    <Card className="bg-gradient-to-br from-blue-600 to-blue-800 border-blue-500 hover:border-blue-400 transition-colors duration-200 gap-0 py-0">
-      <CardContent className="p-4">
+    <Card className="bg-gradient-to-br from-blue-600 to-blue-800 border-blue-500 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 gap-0 py-0">
+      <CardContent className="p-3 sm:p-4">
         <div className="flex items-center gap-2 text-white font-medium">
-          <BookOpen className="h-4 w-4" />
-          <span className="text-sm leading-tight">{materia.nombreMateria}</span>
+          <BookOpen className="h-4 w-4 flex-shrink-0" />
+          <span className="text-sm sm:text-base leading-tight">{materia.nombreMateria}</span>
         </div>
       </CardContent>
     </Card>

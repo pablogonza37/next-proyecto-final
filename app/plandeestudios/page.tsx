@@ -19,22 +19,22 @@ const PlanDeEstudios: React.FC = () => {
   } = usePlanDeEstudios()
 
   return (
-    <div className="h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col">
-      <div className="container mx-auto px-4 py-6 flex flex-col h-full">
+    <div className="min-h-screen sm:h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12 flex flex-col h-full">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-6 flex-shrink-0"
+          className="text-center mb-6 sm:mb-8 md:mb-10 flex-shrink-0"
         >
-          <h1 className="text-3xl font-bold text-white mb-2">Plan de Estudios</h1>
-          <p className="text-gray-300">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-3">Plan de Estudios</h1>
+          <p className="text-gray-300 text-base sm:text-lg md:text-xl max-w-2xl mx-auto">
             Explora todas las materias organizadas por niveles académicos
           </p>
         </motion.div>
 
         {loading ? (
-          <div className="flex flex-wrap gap-4 flex-1 min-h-0">
+           <div className="flex flex-col sm:grid sm:grid-cols-2 sm:place-items-center lg:grid-cols-3 lg:place-items-start gap-4 sm:gap-6 flex-1 min-h-0">
             {Array.from({ length: 5 }).map((_, index) => (
               <SkeletonColumn key={index} />
             ))}
@@ -57,7 +57,7 @@ const PlanDeEstudios: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col lg:flex-row gap-4 flex-1 min-h-0 overflow-x-auto"
+              className="flex flex-col sm:grid sm:grid-cols-2 sm:place-items-start lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0"
           >
             {getNivelesOrdenados().map((nivel, index) => (
               <NivelColumn
