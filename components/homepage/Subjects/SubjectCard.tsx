@@ -8,6 +8,7 @@ import { Clock } from "lucide-react"
 import { type FC } from "react"
 
 interface SubjectCardProps {
+  id: string
   title: string
   description: string
   duration: string
@@ -15,10 +16,11 @@ interface SubjectCardProps {
 }
 
 export const SubjectCard: FC<SubjectCardProps> = ({
+  id,
   title,
   description,
   duration,
-  buttonText = "Inscribirse"
+  buttonText = "Ver Materia"
 }) => {
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -26,18 +28,6 @@ export const SubjectCard: FC<SubjectCardProps> = ({
     transition: { duration: 0.6 },
   }
 
-  const slugifyTitle = (title: string): string => {
-    return title
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim()
-  }
-
-  const subjectSlug = slugifyTitle(title)
 
   return (
     <motion.div 
@@ -61,7 +51,7 @@ export const SubjectCard: FC<SubjectCardProps> = ({
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <Link href={`/${subjectSlug}`} className="w-full">
+            <Link href={`/subjects/${id}`} className="w-full">
               <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 text-base font-medium">
                 {buttonText}
               </Button>

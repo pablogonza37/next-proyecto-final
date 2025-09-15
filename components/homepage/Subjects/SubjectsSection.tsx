@@ -142,6 +142,7 @@ function SubjectsSection() {
             {subjects.map((subject) => (
               <SubjectCard
                 key={subject.id}
+                id={subject.id}
                 title={subject.title}
                 description={subject.description}
                 duration={subject.duration}
