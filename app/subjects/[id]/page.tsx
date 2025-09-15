@@ -6,8 +6,9 @@ import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Loader from "@/components/ui/Loader"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star } from "lucide-react"
-import { obtenerMateriaPorId, nuevaInscripcionCompleta } from "@/app/admin/inscripciones/actions"
+import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones } from "@/app/admin/inscripciones/actions"
 import { useSession } from "next-auth/react"
 import { useRouter as useNextRouter } from "next/navigation"
 import Image from "next/image"
@@ -20,16 +21,31 @@ interface Subject {
   estado: number
 }
 
+interface Comision {
+  _id: string
+  nombreComision: string
+  fechaInicio: string
+  fechaFin: string
+  horaInicio: string
+  horaFin: string
+  diasDictado: string
+  cupo: number
+  nombreMateria: string
+  emailUsuario: string
+}
+
 const SubjectDetailPage: React.FC = () => {
   const params = useParams()
   const router = useRouter()
   const nextRouter = useNextRouter()
   const { data: session, status } = useSession()
   const [subject, setSubject] = useState<Subject | null>(null)
+  const [comisiones, setComisiones] = useState<Comision[] | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [inscribing, setInscribing] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false)
+  const [selectedComision, setSelectedComision] = useState<string | null>(null)
 
   const id = params?.id as string
 
@@ -40,7 +56,12 @@ const SubjectDetailPage: React.FC = () => {
       try {
         setLoading(true)
         const materiaData = await obtenerMateriaPorId(id)
+        const comisionesData = await obtenerMateriasConComisiones(id)
         setSubject(materiaData)
+        setComisiones(comisionesData)
+        if (comisionesData && comisionesData.length > 0) {
+          setSelectedComision(comisionesData[0]._id)
+        }
       } catch (err) {
         setError("No se pudo cargar la información de la materia")
       } finally {
@@ -79,6 +100,14 @@ const SubjectDetailPage: React.FC = () => {
       return
     }
 
+    if (!selectedComision) {
+      setError("Por favor, selecciona una comisión para inscribirte.")
+      setTimeout(() => {
+        setError(null)
+      }, 7000)
+      return
+    }
+
     try {
       setInscribing(true)
       setError(null)
@@ -89,6 +118,7 @@ const SubjectDetailPage: React.FC = () => {
         subject._id,
         session.user.email,
         fechaActual,
+        selectedComision,
         session.backendToken
       )
       
@@ -244,14 +274,30 @@ const SubjectDetailPage: React.FC = () => {
                         💡 Inicia sesión para inscribirte
                       </p>
                     )}
-                    {subject.estado !== 1 && (
-                      <p className="text-sm text-red-400 mt-2">
-                        ⚠️ Esta materia no está disponible para inscripción
-                      </p>
-                    )}
                   </div>
                   
                   <div className="flex flex-col gap-3">
+                    {comisiones && comisiones.length > 0 && (
+                      <Select onValueChange={setSelectedComision} defaultValue={selectedComision || undefined}>
+                        <SelectTrigger className="w-[220px] bg-gray-700 text-white border-gray-600 focus:ring-blue-500">
+                          <SelectValue placeholder="Selecciona una comisión" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                          {comisiones.map((comision) => (
+                            <SelectItem key={comision._id} value={comision._id}>
+                              {comision.nombreComision}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+
+                    {(!comisiones || comisiones.length === 0) && (
+                      <p className="text-sm text-red-400 mt-2 text-center md:text-right">
+                        ⚠️ No hay comisiones disponibles para esta materia.
+                      </p>
+                    )}
+
                     {inscriptionSuccess ? (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -266,9 +312,9 @@ const SubjectDetailPage: React.FC = () => {
                     ) : (
                       <Button
                         onClick={handleInscripcion}
-                        disabled={inscribing || status !== "authenticated" || subject.estado !== 1}
+                        disabled={inscribing || status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0}
                         className={`${
-                          status !== "authenticated" || subject.estado !== 1
+                          status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0
                             ? "bg-gray-600 cursor-not-allowed opacity-50" 
                             : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25"
                         } transform transition-all duration-200 text-white px-10 py-4 text-lg font-medium rounded-lg min-w-[220px]`}

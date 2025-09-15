@@ -63,6 +63,7 @@ export async function nuevaInscripcionCompleta(
   materiaId: string,
   email: string,
   fechaInscripcion: string,
+  comisionId: string,
   token: string
 ) {
   try {
@@ -70,15 +71,8 @@ export async function nuevaInscripcionCompleta(
     
     const materia = await obtenerMateriaPorId(materiaId);
     
-    let comision;
-    try {
-      comision = await crearComisionAutomatica(materia.nombreMateria, token);
-    } catch (error) {
-      comision = { _id: "default-comision-id" };
-    }
-
     const inscripcionData = {
-      comision: comision._id,
+      comision: comisionId,
       materia: materiaId,
       usuario: usuario._id,
       fechaInscripcion: fechaInscripcion
@@ -160,4 +154,9 @@ export async function obtenerMateriaPorId(id: string): Promise<dataMateriaInterf
   } catch (error) {
     throw new Error("No se pudo cargar la materia");
   }
+}
+
+export async function obtenerMateriasConComisiones(id: string) {
+    const res = await axios.get(`${API_URL}/comisiones/materia/${id}`);
+    return res.data;
 }
