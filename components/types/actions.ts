@@ -40,3 +40,10 @@ export interface dataMateriaInterface {
     nivel: string;
     estado: number;
 }
+
+export interface verificacionInscripcionInterface {
+    inscripto: boolean;
+    mensaje?: string;
+    puedeInscribirse?: boolean;
+    razon?: string;
+}

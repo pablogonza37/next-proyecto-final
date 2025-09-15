@@ -11,8 +11,8 @@ const NuevaInscripcionPage = async () => {
       const materias = await obtenerMaterias();
       const comisiones = await obtenerComisiones();
 
-      //Filtrar usuarios por rol "alumno"
       const usuarios = await obtenerUsuarios();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const alumnos = usuarios.filter((u:any) => u.role === "alumno" || u.role.nombreRol === "alumno");
 
   return (

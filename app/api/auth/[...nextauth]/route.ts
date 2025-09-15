@@ -31,6 +31,7 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const u: any = user
       if (u) {
         token.backendToken = u.token
@@ -41,10 +42,12 @@ const handler = NextAuth({
       return token
     },
     async session({ session, token }) {
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const s: any = session
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const t: any = token
       s.user.email = t.email
-      s.user.nombreUsuario = t.nombreUsuario
+      s.user.nombreyUsuario = t.nombreUsuario
       s.backendToken = t.backendToken
       s.user.nombreRol = t.rol
       return s

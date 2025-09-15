@@ -15,13 +15,12 @@ const EditarInscripcionPage = async ({ params }: PageProps) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
-  // 🔹 Obtener la inscripción
   const inscripcion = await obtenerInscripcion(id);
 
-  // 🔹 Obtener opciones relacionadas
   const comisiones = await obtenerComisiones();
   const materias = await obtenerMaterias();
   const usuarios = await obtenerUsuarios();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const alumnos = usuarios.filter((u:any) => u.role === "alumno" || u.role.nombreRol === "alumno");
 
   if (!inscripcion) return <p>Inscripción no encontrada</p>;

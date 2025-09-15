@@ -3,10 +3,9 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { nuevaInscripcion } from "@/app/admin/inscripciones/actions"; // acción al backend
+import { useState } from "react";
+import { nuevaInscripcion } from "@/app/admin/inscripciones/actions"; 
 
-// Validaciones con Zod
 const inscripcionSchema = z.object({
   materia: z.string().min(1, "Debe seleccionar una materia"),
   comision: z.string().min(1, "Debe seleccionar una comisión"),
@@ -18,8 +17,11 @@ const inscripcionSchema = z.object({
 type InscripcionFormData = z.infer<typeof inscripcionSchema>;
 
 interface InscripcionFormNuevoProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   materias: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   comisiones: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   usuarios: any[];
 }
 
@@ -35,7 +37,7 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
       comision: "",
       usuario: "",
       fechaInscripcion: "",
-      estado: "1", // por defecto activa
+      estado: "1", 
     },
   });
 
@@ -49,16 +51,15 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
       };
       const res = await nuevaInscripcion(payload);
       setMensaje(res.mensaje);
-      reset(); // limpia el formulario
+      reset(); 
       router.push("/admin/inscripciones");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error)
-      setMensaje(error.message || "Error al crear la inscripción");
+      setMensaje(error instanceof Error ? error.message : "Error al crear la inscripción");
     }
   };
 
 
-   // Filtrar comisiones
    const comisionesFiltradas = comisiones.filter(
      (c) => c.materia?._id === materiaSeleccionada
    );
@@ -68,7 +69,6 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
     <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
-        {/* Materia */}
         <div className="space-y-2">
           <label htmlFor="materia" className="text-gray-800">Materia:</label>
           <select
@@ -78,7 +78,7 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
             onChange={(e) => {
               const value = e.target.value;
               setMateriaSeleccionada(value);
-              setValue("comision", ""); // 🔑 limpia la comisión al cambiar materia
+              setValue("comision", ""); 
             }}
           >
             <option value="">Seleccione una materia</option>
@@ -89,14 +89,13 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
           {errors.materia && <p className="text-red-500">{errors.materia.message}</p>}
         </div>
 
-        {/* Comisión */}
         <div className="space-y-2">
           <label htmlFor="comision" className="text-gray-800">Comisión:</label>
           <select
             id="comision"
             {...register("comision")}
             className="block w-full p-3 bg-gray-100 mt-3 disabled:opacity-50"
-            disabled={!materiaSeleccionada} // 🔑 deshabilitado si no hay materia
+            disabled={!materiaSeleccionada} 
           >
             <option value="">Seleccione una comisión</option>
             {comisionesFiltradas.map((c) => (
@@ -106,7 +105,6 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
           {errors.comision && <p className="text-red-500">{errors.comision.message}</p>}
         </div>
 
-        {/* Usuario */}
         <div className="space-y-2">
           <label htmlFor="usuario" className="text-gray-800">Usuario:</label>
           <select id="usuario" {...register("usuario")} className="block w-full p-3 bg-gray-100 mt-3">
@@ -118,14 +116,12 @@ const InscripcionFormNuevo = ({ comisiones, materias, usuarios }: InscripcionFor
           {errors.usuario && <p className="text-red-500">{errors.usuario.message}</p>}
         </div>
 
-        {/* Fecha de inscripción */}
         <div className="space-y-2">
           <label htmlFor="fechaInscripcion" className="text-gray-800">Fecha de inscripción:</label>
           <input id="fechaInscripcion" type="date" {...register("fechaInscripcion")} className="block w-full p-3 bg-gray-100 mt-3" />
           {errors.fechaInscripcion && <p className="text-red-500">{errors.fechaInscripcion.message}</p>}
         </div>
 
-        {/* Estado */}
         <div className="space-y-2">
           <label htmlFor="estado" className="text-gray-800">Estado:</label>
           <select id="estado" {...register("estado")} className="block w-full p-3 bg-gray-100 mt-3">

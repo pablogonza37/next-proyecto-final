@@ -8,9 +8,8 @@ import { Button } from "@/components/ui/button"
 import Loader from "@/components/ui/Loader"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star, AlertCircle } from "lucide-react"
-import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones } from "@/app/admin/inscripciones/actions"
+import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones, obtenerUsuarioPorEmail, verificarInscripcion } from "@/app/admin/inscripciones/actions"
 import { useSession } from "next-auth/react"
-import { useRouter as useNextRouter } from "next/navigation"
 import Image from "next/image"
 import Swal from "sweetalert2"
 import "sweetalert2/dist/sweetalert2.min.css"
@@ -39,7 +38,6 @@ interface Comision {
 const SubjectDetailPage: React.FC = () => {
   const params = useParams()
   const router = useRouter()
-  const nextRouter = useNextRouter()
   const { data: session, status } = useSession()
   const [subject, setSubject] = useState<Subject | null>(null)
   const [comisiones, setComisiones] = useState<Comision[] | null>(null)
@@ -48,6 +46,9 @@ const SubjectDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false)
   const [selectedComision, setSelectedComision] = useState<string | null>(null)
+  const [canEnroll, setCanEnroll] = useState<boolean>(true)
+  const [enrollmentMessage, setEnrollmentMessage] = useState<string | null>(null)
+  const [checkingEnrollment, setCheckingEnrollment] = useState<boolean>(false)
 
   const id = params?.id as string
 
@@ -102,7 +103,6 @@ const SubjectDetailPage: React.FC = () => {
         console.error("Error cargando materia:", error)
         let errorMessage = "No se pudo cargar la información de la materia"
         
-        // Error handler más específico
         if (error.message?.includes("network") || error.message?.includes("Network")) {
           errorMessage = "Error de conexión. Verifica tu conexión a internet."
         } else if (error.message?.includes("404") || error.message?.includes("not found")) {
@@ -115,7 +115,6 @@ const SubjectDetailPage: React.FC = () => {
         
         setError(errorMessage)
         
-        // Mostrar alerta de error más detallada
         Swal.fire({
           icon: "error",
           title: "Error al cargar la materia",
@@ -129,7 +128,6 @@ const SubjectDetailPage: React.FC = () => {
           cancelButtonColor: "#6b7280",
         }).then((result) => {
           if (result.isConfirmed) {
-            // Recargar la página para reintentar
             window.location.reload()
           } else if (result.isDismissed) {
             router.back()
@@ -142,6 +140,43 @@ const SubjectDetailPage: React.FC = () => {
 
     cargarMateria()
   }, [id, router])
+
+  useEffect(() => {
+    const verificarPosibilidadInscripcion = async () => {
+      if (status === "authenticated" && session?.user?.email && session?.backendToken && subject?._id) {
+        try {
+          setCheckingEnrollment(true)
+          const usuario = await obtenerUsuarioPorEmail(session.user.email, session.backendToken)
+          const verificacion = await verificarInscripcion(usuario._id, subject._id, session.backendToken)
+          
+          if (verificacion.inscripto === false) {
+            setCanEnroll(true)
+            setEnrollmentMessage(null)
+          } else if (verificacion.inscripto === true) {
+            setCanEnroll(false)
+            setEnrollmentMessage(verificacion.mensaje || "Ya estás inscrito en esta materia")
+          } else {
+            setCanEnroll(verificacion.puedeInscribirse || false)
+            if (!verificacion.puedeInscribirse) {
+              setEnrollmentMessage(verificacion.mensaje || verificacion.razon || "No es posible inscribirse")
+            } else {
+              setEnrollmentMessage(null)
+            }
+          }
+        } catch (err: unknown) {
+          setCanEnroll(true)
+          setEnrollmentMessage(err instanceof Error ? err.message : "No se pudo verificar la inscripción")
+        } finally {
+          setCheckingEnrollment(false)
+        }
+      } else {
+        setCanEnroll(true)
+        setEnrollmentMessage(null)
+      }
+    }
+
+    verificarPosibilidadInscripcion()
+  }, [status, session, subject])
 
   const getDurationByLevel = (nivel: string): string => {
     const nivelNum = parseInt(nivel)
@@ -162,7 +197,7 @@ const SubjectDetailPage: React.FC = () => {
 
   const handleInscripcion = async () => {
     if (status !== "authenticated" || !session?.user?.email || !subject || !session?.backendToken) {
-      nextRouter.push('/login')
+      router.push('/login')
       return
     }
 
@@ -203,51 +238,7 @@ const SubjectDetailPage: React.FC = () => {
       }, 5000)
 
     } catch (err: unknown) {
-      const error = err as Error
-      let mensajeError = "No se pudo completar la inscripción"
-      let tipoError: 'error' | 'warning' | 'info' = 'error'
-      let mostrarContacto = false
-      
-      if (error.message.includes("ya está inscrito") || error.message.includes("already enrolled")) {
-        mensajeError = "Ya te encuentras inscrito en esta materia"
-        tipoError = 'info'
-      } else if (error.message.includes("no encontrado") || error.message.includes("not found")) {
-        mensajeError = "La materia no está disponible para inscripción"
-        mostrarContacto = true
-      } else if (error.message.includes("cupo") || error.message.includes("capacity")) {
-        mensajeError = "No hay cupos disponibles para esta comisión"
-        tipoError = 'warning'
-        mostrarContacto = true
-      } else if (error.message.includes("network") || error.message.includes("Network")) {
-        mensajeError = "Error de conexión. Verifica tu conexión a internet"
-        tipoError = 'warning'
-      } else if (error.message.includes("401") || error.message.includes("unauthorized")) {
-        mensajeError = "Tu sesión ha expirado. Serás redirigido al login"
-        tipoError = 'warning'
-      } else if (error.message) {
-        mensajeError = error.message
-      }
-      
-      // Usar SweetAlert para mostrar errores de inscripción
-      Swal.fire({
-        icon: tipoError,
-        title: tipoError === 'info' ? 'Ya inscrito' : tipoError === 'warning' ? 'Atención' : 'Error de Inscripción',
-        text: mensajeError,
-        footer: mostrarContacto ? '<a href="/contactanos" class="text-blue-600 hover:underline">¿Necesitas ayuda? Contáctanos</a>' : undefined,
-        confirmButtonText: "Entendido",
-        confirmButtonColor: "#3b82f6",
-        timer: tipoError === 'info' ? 3000 : undefined,
-        timerProgressBar: tipoError === 'info' ? true : undefined,
-        showConfirmButton: tipoError !== 'info',
-      })
-      
-      // Manejar redirección para error 401
-      if (error.message.includes("401") || error.message.includes("unauthorized")) {
-        setTimeout(() => {
-          nextRouter.push('/login')
-        }, 2000)
-      }
-      
+      const mensajeError = err instanceof Error ? err.message : "No se pudo completar la inscripción"      
       setError(mensajeError)
       
       setTimeout(() => {
@@ -256,6 +247,7 @@ const SubjectDetailPage: React.FC = () => {
       
     } finally {
       setInscribing(false)
+      router.push("/plandeestudios")
     }
   }
 
@@ -420,6 +412,12 @@ const SubjectDetailPage: React.FC = () => {
                       </motion.div>
                     )}
 
+                    {enrollmentMessage && !canEnroll && status === "authenticated" && (
+                      <p className="text-sm text-red-400 mt-2 text-center md:text-right">
+                        ⚠️ {enrollmentMessage}
+                      </p>
+                    )}
+
                     {inscriptionSuccess ? (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -434,17 +432,19 @@ const SubjectDetailPage: React.FC = () => {
                     ) : (
                       <Button
                         onClick={handleInscripcion}
-                        disabled={inscribing || status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0}
+                        disabled={inscribing || checkingEnrollment || status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0 || !canEnroll}
                         className={`${
-                          status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0
+                          !canEnroll && status === "authenticated"
+                            ? "bg-orange-600 cursor-not-allowed opacity-80"
+                            : status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0
                             ? "bg-gray-600 cursor-not-allowed opacity-50" 
                             : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25"
                         } transform transition-all duration-200 text-white px-10 py-4 text-lg font-medium rounded-lg min-w-[220px]`}
                       >
-                        {status === "loading" ? (
+                        {status === "loading" || checkingEnrollment ? (
                           <>
                             <Loader size="sm" />
-                            <span className="ml-2">Cargando...</span>
+                            <span className="ml-2">{checkingEnrollment ? "Verificando..." : "Cargando..."}</span>
                           </>
                         ) : inscribing ? (
                           <>
@@ -460,6 +460,11 @@ const SubjectDetailPage: React.FC = () => {
                           <>
                             <BookOpen className="h-5 w-5 mr-2" />
                             Materia No Disponible
+                          </>
+                        ) : !canEnroll ? (
+                          <>
+                            <BookOpen className="h-5 w-5 mr-2" />
+                            Ya Inscripto
                           </>
                         ) : (
                           <>
