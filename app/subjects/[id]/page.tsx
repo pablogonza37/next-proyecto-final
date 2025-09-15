@@ -313,7 +313,7 @@ const SubjectDetailPage: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
         </div>
         
-        <div className="relative z-10 flex flex-col justify-center h-72 px-4 sm:px-6 lg:px-8 pt-0">
+        <div className="relative z-10 flex flex-col justify-center h-72 sm:h-64 px-4 sm:px-6 md:px-12 lg:px-16 pt-0">
           <div className="max-w-4xl mx-auto w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -357,12 +357,12 @@ const SubjectDetailPage: React.FC = () => {
       </div>
 
       <div className="relative -mt-24 sm:-mt-20 z-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
             <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8 pt-8 sm:pt-12"
+            className="space-y-8 pt-8 sm:pt-0"
           >
             <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 shadow-2xl">
               <CardContent className="p-8">
