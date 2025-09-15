@@ -53,7 +53,7 @@ const TablaUsuarios = ({usuarios}: TablaUsuariosProps) => {
                                     <th scope="col" className="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0">
                                         Estado
                                     </th>
-                                    <th scope="col" className="py-3 pr-5 text-right text-sm font-semibold text-gray-700 sm:pr-0">
+                                    <th scope="col" className="py-3 text-center text-sm font-semibold text-gray-700 sm:pr-0">
                                         <span className="justify-end pr-5">Acciones</span>
                                     </th>
                                 </tr>
@@ -89,15 +89,14 @@ const TablaUsuarios = ({usuarios}: TablaUsuariosProps) => {
                                             </span>
                                         </td>
                                     
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-5 text-sm font-medium sm:pr-0">
+                                        <td className="whitespace-nowrap py-4 text-sm font-medium sm:pr-0">
                                             <Link href={`/admin/usuarios/${usuario._id}/editar`} className="bg-yellow-200 hover:bg-yellow-300 font-bold text-xl text-black py-3 px-5 rounded transition-all cursor-pointer">Editar</Link>
-                                        </td>
 
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-5 text-sm font-medium sm:pr-0">
-                                            <BotonBorrar nombreItem={usuario.nombreUsuario} action={() => borrarUsuario(usuario._id)}
+                                             <BotonBorrar nombreItem={usuario.nombreUsuario} action={() => borrarUsuario(usuario._id)}
                                             />
                                         </td>
-                                        
+
+                                       
                                         
                                     </tr>
                                 ))

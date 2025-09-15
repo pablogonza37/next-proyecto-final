@@ -49,6 +49,21 @@ export async function borrarInscripcion(id: string) {
   }
 }
 
+
+export async function nuevaInscripcion(data: dataInscripcionInterface) {
+  try {
+    const res = await axios.post(`${API_URL}/inscripciones/nuevo`, data, {
+      headers: { "Content-Type": "application/json" }
+    });
+    return res.data;
+  } catch (error: any) {
+    console.error("Error al crear una nueva inscripción:", error.response?.data);
+    const mensaje = error.response?.data?.mensaje || "No se pudo crear la inscripción";
+
+    throw new Error(mensaje);
+  }
+}
+
 export async function obtenerMaterias(): Promise<dataMateriaInterface[]> {
   try {
     const res = await axios.get(`${API_URL}/materias`);

@@ -47,3 +47,24 @@ export async function actualizarRol(
     throw new Error(mensaje);
   }
 }
+
+// Acción para obtener un rol existente
+export async function obtenerRol(id: string) {
+  const res = await axios.get(`${API_URL}/roles/${id}`);
+  return res.data;
+}
+
+
+//Acción para borrar un rol existente
+export async function borrarRol(id: string) {
+  try {
+    const res = await axios.delete(`${API_URL}/roles/${id}`, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data; // devuelve lo que la API responda
+  } catch (error: any) {
+    console.error("Error al borrar el rol:", error.response?.data);
+    const mensaje = error.response?.data?.mensaje || "No se pudo borrar el rol";
+    throw new Error(mensaje);
+  }
+}

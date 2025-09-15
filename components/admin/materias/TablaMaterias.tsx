@@ -34,7 +34,7 @@ const TablaMaterias = ({materias}: TablaMateriasProps) => {
                                     <th scope="col" className="py-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-700 sm:pl-0">
                                         Estado
                                     </th>
-                                    <th scope="col" className="py-3 pr-5 text-right text-sm font-semibold text-gray-700 sm:pr-0">
+                                    <th scope="col" className="py-3 pr-5 text-center text-sm font-semibold text-gray-700 sm:pr-0">
                                         <span className="justify-end pr-5">Acciones</span>
                                     </th>
                                 </tr>
