@@ -8,9 +8,8 @@ import { Button } from "@/components/ui/button"
 import Loader from "@/components/ui/Loader"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star, AlertCircle } from "lucide-react"
-import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones } from "@/app/admin/inscripciones/actions"
+import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones, obtenerUsuarioPorEmail, verificarInscripcion } from "@/app/admin/inscripciones/actions"
 import { useSession } from "next-auth/react"
-import { useRouter as useNextRouter } from "next/navigation"
 import Image from "next/image"
 import { confirmSubjectEnrollment, showEnrollmentSuccess, showEnrollmentError, showInfo } from "@/lib/sweetalert"
 
@@ -38,7 +37,6 @@ interface Comision {
 const SubjectDetailPage: React.FC = () => {
   const params = useParams()
   const router = useRouter()
-  const nextRouter = useNextRouter()
   const { data: session, status } = useSession()
   const [subject, setSubject] = useState<Subject | null>(null)
   const [comisiones, setComisiones] = useState<Comision[] | null>(null)
@@ -47,6 +45,9 @@ const SubjectDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const [inscriptionSuccess, setInscriptionSuccess] = useState<boolean>(false)
   const [selectedComision, setSelectedComision] = useState<string | null>(null)
+  const [canEnroll, setCanEnroll] = useState<boolean>(true)
+  const [enrollmentMessage, setEnrollmentMessage] = useState<string | null>(null)
+  const [checkingEnrollment, setCheckingEnrollment] = useState<boolean>(false)
 
   const id = params?.id as string
 
@@ -78,7 +79,6 @@ const SubjectDetailPage: React.FC = () => {
         console.error("Error cargando materia:", error)
         let errorMessage = "No se pudo cargar la información de la materia"
         
-        // Error handler más específico
         if (error.message?.includes("network") || error.message?.includes("Network")) {
           errorMessage = "Error de conexión. Verifica tu conexión a internet."
         } else if (error.message?.includes("404") || error.message?.includes("not found")) {
@@ -91,10 +91,24 @@ const SubjectDetailPage: React.FC = () => {
         
         setError(errorMessage)
         
+<<<<<<< HEAD
         // Mostrar alerta de error más detallada
         showEnrollmentError(errorMessage).then((result) => {
+=======
+        Swal.fire({
+          icon: "error",
+          title: "Error al cargar la materia",
+          text: errorMessage,
+          footer: '<a href="/contactanos">¿Necesitas ayuda? Contáctanos</a>',
+          showConfirmButton: true,
+          confirmButtonText: "Reintentar",
+          showCancelButton: true,
+          cancelButtonText: "Volver",
+          confirmButtonColor: "#3b82f6",
+          cancelButtonColor: "#6b7280",
+        }).then((result) => {
+>>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
           if (result.isConfirmed) {
-            // Recargar la página para reintentar
             window.location.reload()
           } else if (result.isDismissed) {
             router.back()
@@ -107,6 +121,43 @@ const SubjectDetailPage: React.FC = () => {
 
     cargarMateria()
   }, [id, router])
+
+  useEffect(() => {
+    const verificarPosibilidadInscripcion = async () => {
+      if (status === "authenticated" && session?.user?.email && session?.backendToken && subject?._id) {
+        try {
+          setCheckingEnrollment(true)
+          const usuario = await obtenerUsuarioPorEmail(session.user.email, session.backendToken)
+          const verificacion = await verificarInscripcion(usuario._id, subject._id, session.backendToken)
+          
+          if (verificacion.inscripto === false) {
+            setCanEnroll(true)
+            setEnrollmentMessage(null)
+          } else if (verificacion.inscripto === true) {
+            setCanEnroll(false)
+            setEnrollmentMessage(verificacion.mensaje || "Ya estás inscrito en esta materia")
+          } else {
+            setCanEnroll(verificacion.puedeInscribirse || false)
+            if (!verificacion.puedeInscribirse) {
+              setEnrollmentMessage(verificacion.mensaje || verificacion.razon || "No es posible inscribirse")
+            } else {
+              setEnrollmentMessage(null)
+            }
+          }
+        } catch (err: unknown) {
+          setCanEnroll(true)
+          setEnrollmentMessage(err instanceof Error ? err.message : "No se pudo verificar la inscripción")
+        } finally {
+          setCheckingEnrollment(false)
+        }
+      } else {
+        setCanEnroll(true)
+        setEnrollmentMessage(null)
+      }
+    }
+
+    verificarPosibilidadInscripcion()
+  }, [status, session, subject])
 
   const getDurationByLevel = (nivel: string): string => {
     const nivelNum = parseInt(nivel)
@@ -127,7 +178,7 @@ const SubjectDetailPage: React.FC = () => {
 
   const handleInscripcion = async () => {
     if (status !== "authenticated" || !session?.user?.email || !subject || !session?.backendToken) {
-      nextRouter.push('/login')
+      router.push('/login')
       return
     }
 
@@ -165,6 +216,7 @@ const SubjectDetailPage: React.FC = () => {
       }, 5000)
 
     } catch (err: unknown) {
+<<<<<<< HEAD
       const error = err as Error
       let mensajeError = "No se pudo completar la inscripción"
       let tipoError: 'error' | 'warning' | 'info' = 'error'
@@ -204,6 +256,9 @@ const SubjectDetailPage: React.FC = () => {
         }, 2000)
       }
       
+=======
+      const mensajeError = err instanceof Error ? err.message : "No se pudo completar la inscripción"      
+>>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
       setError(mensajeError)
       
       setTimeout(() => {
@@ -212,6 +267,7 @@ const SubjectDetailPage: React.FC = () => {
       
     } finally {
       setInscribing(false)
+      router.push("/plandeestudios")
     }
   }
 
@@ -376,6 +432,12 @@ const SubjectDetailPage: React.FC = () => {
                       </motion.div>
                     )}
 
+                    {enrollmentMessage && !canEnroll && status === "authenticated" && (
+                      <p className="text-sm text-red-400 mt-2 text-center md:text-right">
+                        ⚠️ {enrollmentMessage}
+                      </p>
+                    )}
+
                     {inscriptionSuccess ? (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -390,17 +452,19 @@ const SubjectDetailPage: React.FC = () => {
                     ) : (
                       <Button
                         onClick={handleInscripcion}
-                        disabled={inscribing || status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0}
+                        disabled={inscribing || checkingEnrollment || status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0 || !canEnroll}
                         className={`${
-                          status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0
+                          !canEnroll && status === "authenticated"
+                            ? "bg-orange-600 cursor-not-allowed opacity-80"
+                            : status !== "authenticated" || subject.estado !== 1 || !selectedComision || !comisiones || comisiones.length === 0
                             ? "bg-gray-600 cursor-not-allowed opacity-50" 
                             : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/25"
                         } transform transition-all duration-200 text-white px-10 py-4 text-lg font-medium rounded-lg min-w-[220px]`}
                       >
-                        {status === "loading" ? (
+                        {status === "loading" || checkingEnrollment ? (
                           <>
                             <Loader size="sm" />
-                            <span className="ml-2">Cargando...</span>
+                            <span className="ml-2">{checkingEnrollment ? "Verificando..." : "Cargando..."}</span>
                           </>
                         ) : inscribing ? (
                           <>
@@ -416,6 +480,11 @@ const SubjectDetailPage: React.FC = () => {
                           <>
                             <BookOpen className="h-5 w-5 mr-2" />
                             Materia No Disponible
+                          </>
+                        ) : !canEnroll ? (
+                          <>
+                            <BookOpen className="h-5 w-5 mr-2" />
+                            Ya Inscripto
                           </>
                         ) : (
                           <>

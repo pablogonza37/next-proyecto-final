@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { nuevoUsuario } from "@/app/admin/usuarios/actions";
 
-// Esquema de Zod equivalente a las validaciones del backend
 const usuarioSchema = z.object({
   nombreUsuario: z
     .string()
@@ -48,12 +47,12 @@ const UsuarioFormNuevo = () => {
     setMensaje(null);
     try {
       const payload = { ...data };
-      const res = await nuevoUsuario(payload); // tu acción para enviar al backend
+      const res = await nuevoUsuario(payload); 
       setMensaje(`Usuario "${res.nombre}" creado correctamente`);
       reset();
       router.push('/admin/usuarios');
-    } catch (error: any) {
-      setMensaje(error.message || "Error al crear el usuario");
+    } catch (error: unknown) {
+      setMensaje(error instanceof Error ? error.message : "Error al crear el usuario");
     }
   };
 
@@ -88,7 +87,6 @@ const UsuarioFormNuevo = () => {
         </div>
         ))}
 
-        {/* Campo DNI como número usando Controller */}
         <div className="space-y-2">
         <label className="text-gray-800" htmlFor="dni">{labelsMap["dni"]}:</label>
         

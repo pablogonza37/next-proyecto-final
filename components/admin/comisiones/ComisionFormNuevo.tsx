@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { nuevaComision } from "@/app/admin/comisiones/actions"; // acción al backend
+import { nuevaComision } from "@/app/admin/comisiones/actions"; 
 
-// Validaciones con Zod
 const comisionSchema = z.object({
   nombreComision: z.string()
     .min(2, "El nombre de la comisión debe tener al menos 2 caracteres")
@@ -27,6 +26,7 @@ const comisionSchema = z.object({
 
 type ComisionFormNuevoData = z.infer<typeof comisionSchema>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: any[] }) => {
   const router = useRouter();
   const [mensaje, setMensaje] = useState<string | null>(null);
@@ -45,7 +45,7 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
     try {
       const payload = {
         ...data,
-        fechaInicio: new Date(data.fechaInicio), // convertir a Date
+        fechaInicio: new Date(data.fechaInicio), 
         fechaFin: new Date(data.fechaFin),
         cupo: parseInt(data.cupo),
         estado: parseInt(data.estado)
@@ -54,15 +54,14 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
       setMensaje(res.mensaje);
       reset();
       router.push("/admin/comisiones");
-    } catch (error: any) {
-      setMensaje(error.message || "Error al crear la comisión");
+    } catch (error: unknown) {
+      setMensaje(error instanceof Error ? error.message : "Error al crear la comisión");
     }
   };
 
   return (
     <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Nombre Comisión */}
         <div className="space-y-2">
           <label htmlFor="nombreComision" className="text-gray-800">
             Nombre de la Comisión:
@@ -76,7 +75,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           {errors.nombreComision && <p className="text-red-500">{errors.nombreComision.message}</p>}
         </div>
 
-        {/* Fechas */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="fechaInicio" className="text-gray-800">Fecha Inicio:</label>
@@ -101,7 +99,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           </div>
         </div>
 
-        {/* Horarios */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="horaInicio" className="text-gray-800">Hora Inicio:</label>
@@ -126,7 +123,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           </div>
         </div>
 
-        {/* Días de dictado */}
         <div className="space-y-2">
           <label htmlFor="diasDictado" className="text-gray-800">
             Días de Dictado:
@@ -140,7 +136,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           {errors.diasDictado && <p className="text-red-500">{errors.diasDictado.message}</p>}
         </div>
 
-        {/* Cupo */}
         <div className="space-y-2">
           <label htmlFor="cupo" className="text-gray-800">
             Cupo:
@@ -154,7 +149,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           {errors.cupo && <p className="text-red-500">{errors.cupo.message}</p>}
         </div>
 
-        {/* Materia */}
         <div className="space-y-2">
           <label htmlFor="materia" className="text-gray-800">
             Materia:
@@ -174,7 +168,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           {errors.materia && <p className="text-red-500">{errors.materia.message}</p>}
         </div>
 
-        {/* Usuario */}
         <div className="space-y-2">
           <label htmlFor="usuario" className="text-gray-800">
             Usuario:
@@ -194,7 +187,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           {errors.usuario && <p className="text-red-500">{errors.usuario.message}</p>}
         </div>
 
-        {/* Estado */}
         <div className="space-y-2">
           <label htmlFor="estado" className="text-gray-800">Estado:</label>
           <select
@@ -208,7 +200,6 @@ const ComisionFormNuevo = ({ materias, usuarios }: { materias: any[]; usuarios: 
           {errors.estado && <p className="text-red-500">{errors.estado.message}</p>}
         </div>
 
-        {/* Botón */}
         <button
           type="submit"
           disabled={isSubmitting}

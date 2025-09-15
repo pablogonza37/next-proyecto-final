@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { actualizarMateria } from "@/app/admin/materias/actions";
 
-// 🔹 Validaciones
 const materiaSchema = z.object({
   nombreMateria: z
     .string()
@@ -51,8 +50,8 @@ const MateriaFormEditar = ({ materia }: MateriaFormEditarProps) => {
       const res = await actualizarMateria(materia._id, payload);
       setMensaje(res.mensaje);
       router.push("/admin/materias");
-    } catch (error: any) {
-      setMensaje(error.message || "Error al actualizar la materia");
+    } catch (error: unknown) {
+      setMensaje(error instanceof Error ? error.message : "Error al actualizar la materia");
     }
   };
 
@@ -60,21 +59,18 @@ const MateriaFormEditar = ({ materia }: MateriaFormEditarProps) => {
     <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
-        {/* Nombre */}
         <div>
           <label>Nombre de la Materia:</label>
           <input {...register("nombreMateria")} className="block w-full p-3 bg-gray-100" />
           {errors.nombreMateria && <p className="text-red-500">{errors.nombreMateria.message}</p>}
         </div>
 
-        {/* Descripción */}
         <div>
           <label>Descripción:</label>
           <input {...register("descripcion")} className="block w-full p-3 bg-gray-100" />
           {errors.descripcion && <p className="text-red-500">{errors.descripcion.message}</p>}
         </div>
 
-        {/* Nivel */}
         <div>
           <label>Nivel:</label>
           <select {...register("nivel")} className="block w-full p-3 bg-gray-100 mt-3" defaultValue={materia.nivel}>
@@ -85,7 +81,6 @@ const MateriaFormEditar = ({ materia }: MateriaFormEditarProps) => {
           {errors.nivel && <p className="text-red-500">{errors.nivel.message}</p>}
         </div>
 
-        {/* Estado */}
        <div>
           <label>Estado:</label>
           <select {...register("estado", { valueAsNumber: true })} className="block w-full p-3 bg-gray-100">

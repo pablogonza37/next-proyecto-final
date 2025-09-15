@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { nuevaMateria } from "@/app/admin/materias/actions"; // tu acción al backend
+import { nuevaMateria } from "@/app/admin/materias/actions"; 
 
-// Validaciones con Zod
 const materiaSchema = z.object({
     nombreMateria: z
         .string()
@@ -42,19 +41,18 @@ const MateriaFormNuevo = () => {
         setMensaje(null);
         try {
             const payload = { ...data, estado: parseInt(data.estado) };
-            const res = await nuevaMateria(payload); // acción al backend
+            const res = await nuevaMateria(payload); 
             setMensaje(res.mensaje);
             reset();
             router.push("/admin/materias");
-        } catch (error: any) {
-            setMensaje(error.message || "Error al crear la materia");
+        } catch (error: unknown) {
+            setMensaje(error instanceof Error ? error.message : "Error al crear la materia");
         }
     };
 
     return (
         <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                {/* Nombre materia */}
                 <div className="space-y-2">
                     <label className="text-gray-800" htmlFor="nombreMateria">
                         Nombre de la Materia:
@@ -85,7 +83,6 @@ const MateriaFormNuevo = () => {
                     )}
                 </div>
 
-                {/* Nivel */}
                 <div className="space-y-2">
                     <label className="text-gray-800" htmlFor="nivel">
                         Nivel:
@@ -106,7 +103,6 @@ const MateriaFormNuevo = () => {
                     )}
                 </div>
 
-                {/* Estado */}
                 <div className="space-y-2">
                     <label className="text-gray-800" htmlFor="selectionType">
                         Tipo de Estado:

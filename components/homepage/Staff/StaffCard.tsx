@@ -10,16 +10,12 @@ interface StaffCardProps {
   name: string
   imageSrc: string
   linkedinUrl?: string
-  role?: string
-  description?: string
 }
 
 export const StaffCard: FC<StaffCardProps> = ({ 
   name, 
   imageSrc, 
   linkedinUrl, 
-  role = "Profesor", 
-  description 
 }) => {
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },

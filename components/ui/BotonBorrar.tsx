@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { confirmDelete, showSuccess, showError } from "@/lib/sweetalert";
 
 interface BotonBorrarProps {
-  nombreItem: string;                // Nombre del usuario o ítem a borrar
-  action: () => Promise<any>;        // Función que ejecuta el borrado (como tu action con axios)
-  className?: string;                // Opcional: clases de Tailwind u otras
+  nombreItem: string;                
+  action: () => Promise<unknown>;        
+  className?: string;                
 }
 
 const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
@@ -16,11 +16,19 @@ const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
 
     if (result.isConfirmed) {
       try {
+<<<<<<< HEAD
         await action(); // ejecuta la función de borrado (axios)
         await showSuccess("¡Eliminado!", `${nombreItem} ha sido eliminado correctamente`);
         router.refresh(); // 🔹 Esto recarga los datos del server component
       } catch (error: any) {
         await showError("Error al eliminar", error.message || "No se pudo eliminar el elemento");
+=======
+        await action(); 
+        Swal.fire("Borrado", `${nombreItem} ha sido eliminado`, "success");
+        router.refresh(); 
+      } catch (error: unknown) {
+        Swal.fire("Error", error instanceof Error ? error.message : "No se pudo eliminar el elemento", "error");
+>>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
         console.error(error);
       }
     }

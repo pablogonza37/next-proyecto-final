@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aula Link - Next JS - RollingCode School
 
-## Getting Started
+## Arquitectura del Software:
 
-First, run the development server:
+- Frontend: Next Js.
+- Backend: Node Js.
+- Base de Datos: Mongo DB
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Funcionalidades:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1- Login y Registro.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2- Página Home donde se mostrarán el listado de cursos que verá el cliente o alumno en este caso para inscripciones a la materia.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3 - Panel de administración donde se maneje Roles, Usuarios, Materias, Comisiones e Inscripciones.
 
-## Learn More
+4- Barra de menú horizontal donde aparezcan los links tanto públicos como privados.
 
-To learn more about Next.js, take a look at the following resources:
+5- Inscripciones a la materia que va a cursar el alumno. donde cada materia tiene un profesor, dias de dictado y hora.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Alcance del proyecto 💡
 
-## Deploy on Vercel
+Este repositorio contiene el **frontend** del sistema **Aulalink**, desarrollado con **Next.js** y estilizado con **Tailwind CSS**.  
+Se conecta al backend vía API REST y maneja autenticación con **NextAuth**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Link Versión de producción 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Vercel](link)
+
+## Tecnologias / Herramientas 🛠
+
+- Next.js 15 (App Router)
+- React 19
+- Typescript
+- Tailwind CSS
+- Axios
+- NextAuth.js para autenticación
+- Zod + React Hook Form para validaciones de formularios
+- SweetAlert2 para mensajes y notificaciones
+- Zustand para los estados globales
+
+## Para entorno **local**:
+
+Creamos el archivo .env y agregamos las siguientes variables de entorno
+
+- NEXT_PUBLIC_API_URL=http://localhost:4010/api
+- NEXTAUTH_SECRET="EsUnaP4labr4S3cr3t4"
+
+## Para entorno **remoto**:
+
+Creamos el archivo .env y agregamos las siguientes variables de entorno
+
+- NEXT_PUBLIC_API_URL=https://backend-aulalink-next.vercel.app/api
+- NEXTAUTH_SECRET="EsUnaP4labr4S3cr3t4"
+
+## Pasos para clonar y ejecutar la Aplicación 🖥
+
+Sigue estos pasos para clonar y ejecutar la aplicación en tu entorno local:
+
+1.  **Clona el repositorio:** En tu línea de comandos, ejecuta el siguiente comando para clonar el repositorio:
+
+    ```
+    git clone https://github.com/pablogonza37/next-proyecto-final.git
+    ```
+
+2.  **Accede al directorio:** Ve al directorio de la aplicación clonada:
+
+    ```
+    cd next-proyecto-final
+    ```
+
+3.  **Instala las dependencias:** Ejecuta el siguiente comando para instalar las dependencias de la aplicación:
+
+    ```
+    npm install
+    ```
+
+4.  **Inicia la aplicación:** Utiliza el siguiente comando para iniciar la aplicación en tu entorno local:
+
+    ```
+    npm run dev
+    ```
+
+5.  **Accede a la aplicación:** Abre tu navegador web y visita la siguiente URL: http://localhost:3000/. La aplicación debería cargarse y estar lista para usar.
+
+## Credenciales para la autenticación
+
+Usuario admin: **admin@admin.com** - Password: **12345678Aa**
+
+Usuario profesor: **profesor@profesor.com** - Password: **12345678Aa**
+
+Usuario alumno: **alumno@alumno.com** - Password: **12345678Aa**
+
+## Repositorio Backend 📌
+
+[Backend AulaLink](https://github.com/jgromerou/backend-aulalink-next.git)
+
+## Diagrama de Clases
+
+![alt text](AulaLinkDiagramaDeFlujo.drawio.png)
+
+## Integrantes
+
+- *Perez, Francisco Miguel*
+- *Gonzalez, Pablo Gaston*
+- *Capdevilla, Lucas*
+- *Romero Uro, Juan Gerardo*

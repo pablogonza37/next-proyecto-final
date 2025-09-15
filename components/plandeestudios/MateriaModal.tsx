@@ -1,14 +1,25 @@
 import React from 'react'
 import { motion, AnimatePresence } from "framer-motion"
-import { BookOpen, X } from "lucide-react"
+import { BookOpen, X, UserPlus } from "lucide-react"
 import { dataMateriaInterface } from "@/components/types/actions"
+import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 interface MateriaModalProps {
   selectedMateria: dataMateriaInterface | null
   onClose: () => void
 }
 
-const MateriaModal: React.FC<MateriaModalProps> = ({ selectedMateria, onClose }) => (
+const MateriaModal: React.FC<MateriaModalProps> = ({ selectedMateria, onClose }) => {
+  const router = useRouter()
+
+  const handleInscribirse = () => {
+    if (selectedMateria) {
+      router.push(`/subjects/${selectedMateria._id}`)
+    }
+  }
+
+  return (
   <AnimatePresence>
     {selectedMateria && (
       <motion.div
@@ -40,13 +51,23 @@ const MateriaModal: React.FC<MateriaModalProps> = ({ selectedMateria, onClose })
           <p className="text-gray-300 leading-relaxed mb-4">
             {selectedMateria.descripcion}
           </p>
-          <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm inline-block">
-            Nivel {selectedMateria.nivel}
+          <div className="flex items-center justify-between mt-6">
+            <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
+              Nivel {selectedMateria.nivel}
+            </div>
+            <Button
+              onClick={handleInscribirse}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2"
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Inscribirse
+            </Button>
           </div>
         </motion.div>
       </motion.div>
     )}
   </AnimatePresence>
-)
+  )
+}
 
 export default MateriaModal
