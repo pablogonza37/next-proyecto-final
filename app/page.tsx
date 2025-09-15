@@ -1,103 +1,96 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { motion } from "framer-motion"
+import {
+  Search,
+  Star,
+  Users,
+  BookOpen,
+} from "lucide-react"
+import StaffSection from "@/components/homepage/Staff/StaffSection"
+import SubjectsSection from "@/components/homepage/Subjects/SubjectsSection"
+
+export default function HomePage() {
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 },
+  }
+
+  const fadeIn = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.8 },
+  }
+
+  const staggerContainer = {
+    animate: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gray-900">
+      {/* Contenido principal */}
+      <motion.section className="bg-gradient-to-b from-gray-800 to-black py-20" {...fadeIn}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.h2 className="text-5xl font-bold text-white mb-6" {...fadeInUp}>
+            Inscríbete a tus Materias
+          </motion.h2>
+          <motion.p
+            className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Materias académicas de programación y desarrollo. Inscríbete y avanza en tu carrera profesional con
+            contenido de calidad universitaria.
+          </motion.p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="relative w-full max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 z-10" />
+              <Input
+                placeholder="Buscar materias..."
+                className="pl-10 bg-gray-800/80 border-gray-700 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-11 rounded-lg backdrop-blur-sm"
+              />
+            </div>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 h-11 rounded-lg font-medium transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25">Buscar</Button>
+          </motion.div>
+
+          <motion.div
+            className="flex flex-wrap justify-center gap-8 text-gray-200"
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
           >
-            Read our docs
-          </a>
+            <motion.div className="flex items-center gap-2" variants={fadeInUp}>
+              <Users className="h-5 w-5 text-blue-500" />
+              <span>+50,000 estudiantes inscritos</span>
+            </motion.div>
+            <motion.div className="flex items-center gap-2" variants={fadeInUp}>
+              <BookOpen className="h-5 w-5 text-blue-500" />
+              <span>+100 materias</span>
+            </motion.div>
+            <motion.div className="flex items-center gap-2" variants={fadeInUp}>
+              <Star className="h-5 w-5 text-blue-500" />
+              <span>4.8/5 valoración</span>
+            </motion.div>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </motion.section>
+
+      <SubjectsSection />
+      <StaffSection />
     </div>
-  );
+  )
 }
