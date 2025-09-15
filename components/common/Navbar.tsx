@@ -4,9 +4,14 @@ import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import Swal from "sweetalert2"
 import "sweetalert2/dist/sweetalert2.min.css"
+import Loader from "../ui/Loader"
 
 export const Navbar = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+
+   if (status === "loading") {
+    return <Loader />
+  }
 
   const nombreUsuario = session?.user?.nombreUsuario
   const nombreRol = session?.user?.nombreRol
