@@ -12,8 +12,7 @@ import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisi
 import { useSession } from "next-auth/react"
 import { useRouter as useNextRouter } from "next/navigation"
 import Image from "next/image"
-import Swal from "sweetalert2"
-import "sweetalert2/dist/sweetalert2.min.css"
+import { confirmSubjectEnrollment, showEnrollmentSuccess, showEnrollmentError, showInfo } from "@/lib/sweetalert"
 
 interface Subject {
   _id: string
@@ -68,33 +67,10 @@ const SubjectDetailPage: React.FC = () => {
         } else {
           // Mostrar alerta informativa sobre comisiones no disponibles
           setTimeout(() => {
-            Swal.fire({
-              icon: "info",
-              title: "Comisiones no disponibles",
-              html: `
-                <div class="text-left">
-                  <p class="mb-3">Actualmente no hay comisiones disponibles para <strong>${materiaData.nombreMateria}</strong>.</p>
-                  <p class="mb-2">Esto puede ocurrir por:</p>
-                  <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                    <li>Las comisiones aún no han sido programadas</li>
-                    <li>Todas las comisiones están completas</li>
-                    <li>El período de inscripciones ha finalizado</li>
-                  </ul>
-                  <p class="mt-3 text-sm">Te recomendamos contactar con la administración o volver más tarde.</p>
-                </div>
-              `,
-              showCloseButton: true,
-              showCancelButton: true,
-              confirmButtonText: "Contactar Administración",
-              cancelButtonText: "Entendido",
-              confirmButtonColor: "#3b82f6",
-              cancelButtonColor: "#6b7280",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // Redirigir a página de contacto
-                router.push('/contactanos')
-              }
-            })
+            showInfo(
+              "Comisiones no disponibles",
+              `Actualmente no hay comisiones disponibles para ${materiaData.nombreMateria}. Esto puede ocurrir porque las comisiones aún no han sido programadas, todas están completas o el período de inscripciones ha finalizado. Te recomendamos contactar con la administración o volver más tarde.`
+            )
           }, 1000)
         }
       } catch (err: unknown) {
@@ -116,18 +92,7 @@ const SubjectDetailPage: React.FC = () => {
         setError(errorMessage)
         
         // Mostrar alerta de error más detallada
-        Swal.fire({
-          icon: "error",
-          title: "Error al cargar la materia",
-          text: errorMessage,
-          footer: '<a href="/contactanos">¿Necesitas ayuda? Contáctanos</a>',
-          showConfirmButton: true,
-          confirmButtonText: "Reintentar",
-          showCancelButton: true,
-          cancelButtonText: "Volver",
-          confirmButtonColor: "#3b82f6",
-          cancelButtonColor: "#6b7280",
-        }).then((result) => {
+        showEnrollmentError(errorMessage).then((result) => {
           if (result.isConfirmed) {
             // Recargar la página para reintentar
             window.location.reload()
@@ -172,13 +137,10 @@ const SubjectDetailPage: React.FC = () => {
     }
 
     if (!selectedComision || !comisiones || comisiones.length === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "Comisión requerida",
-        text: "Por favor, selecciona una comisión para inscribirte.",
-        confirmButtonText: "Entendido",
-        confirmButtonColor: "#3b82f6",
-      })
+      await showInfo(
+        "Comisión requerida",
+        "Por favor, selecciona una comisión para inscribirte."
+      )
       return
     }
 
@@ -229,17 +191,11 @@ const SubjectDetailPage: React.FC = () => {
       }
       
       // Usar SweetAlert para mostrar errores de inscripción
-      Swal.fire({
-        icon: tipoError,
-        title: tipoError === 'info' ? 'Ya inscrito' : tipoError === 'warning' ? 'Atención' : 'Error de Inscripción',
-        text: mensajeError,
-        footer: mostrarContacto ? '<a href="/contactanos" class="text-blue-600 hover:underline">¿Necesitas ayuda? Contáctanos</a>' : undefined,
-        confirmButtonText: "Entendido",
-        confirmButtonColor: "#3b82f6",
-        timer: tipoError === 'info' ? 3000 : undefined,
-        timerProgressBar: tipoError === 'info' ? true : undefined,
-        showConfirmButton: tipoError !== 'info',
-      })
+      if (tipoError === 'info') {
+        showInfo('Ya inscrito', mensajeError)
+      } else {
+        showEnrollmentError(mensajeError)
+      }
       
       // Manejar redirección para error 401
       if (error.message.includes("401") || error.message.includes("unauthorized")) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import { confirmDelete, showSuccess, showError } from "@/lib/sweetalert";
 
 interface BotonBorrarProps {
   nombreItem: string;                // Nombre del usuario o ítem a borrar
@@ -12,23 +12,15 @@ interface BotonBorrarProps {
 const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
   const router = useRouter();
   const handleDelete = async () => {
-    const result = await Swal.fire({
-      title: `¿Estás seguro que deseas borrar a ${nombreItem}?`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#e53e3e",
-      cancelButtonColor: "#a0aec0",
-      confirmButtonText: "Sí, borrar",
-      cancelButtonText: "Cancelar",
-    });
+    const result = await confirmDelete(nombreItem);
 
     if (result.isConfirmed) {
       try {
         await action(); // ejecuta la función de borrado (axios)
-        Swal.fire("Borrado", `${nombreItem} ha sido eliminado`, "success");
+        await showSuccess("¡Eliminado!", `${nombreItem} ha sido eliminado correctamente`);
         router.refresh(); // 🔹 Esto recarga los datos del server component
       } catch (error: any) {
-        Swal.fire("Error", error.message || "No se pudo eliminar el elemento", "error");
+        await showError("Error al eliminar", error.message || "No se pudo eliminar el elemento");
         console.error(error);
       }
     }
