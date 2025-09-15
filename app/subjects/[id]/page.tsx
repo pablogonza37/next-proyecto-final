@@ -11,7 +11,7 @@ import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star
 import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones, obtenerUsuarioPorEmail, verificarInscripcion } from "@/app/admin/inscripciones/actions"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
-import { confirmSubjectEnrollment, showEnrollmentSuccess, showEnrollmentError, showInfo } from "@/lib/sweetalert"
+import { showEnrollmentError, showInfo } from "@/lib/sweetalert"
 
 interface Subject {
   _id: string
@@ -91,23 +91,8 @@ const SubjectDetailPage: React.FC = () => {
         
         setError(errorMessage)
         
-<<<<<<< HEAD
         // Mostrar alerta de error más detallada
         showEnrollmentError(errorMessage).then((result) => {
-=======
-        Swal.fire({
-          icon: "error",
-          title: "Error al cargar la materia",
-          text: errorMessage,
-          footer: '<a href="/contactanos">¿Necesitas ayuda? Contáctanos</a>',
-          showConfirmButton: true,
-          confirmButtonText: "Reintentar",
-          showCancelButton: true,
-          cancelButtonText: "Volver",
-          confirmButtonColor: "#3b82f6",
-          cancelButtonColor: "#6b7280",
-        }).then((result) => {
->>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
           if (result.isConfirmed) {
             window.location.reload()
           } else if (result.isDismissed) {
@@ -216,49 +201,7 @@ const SubjectDetailPage: React.FC = () => {
       }, 5000)
 
     } catch (err: unknown) {
-<<<<<<< HEAD
-      const error = err as Error
-      let mensajeError = "No se pudo completar la inscripción"
-      let tipoError: 'error' | 'warning' | 'info' = 'error'
-      let mostrarContacto = false
-      
-      if (error.message.includes("ya está inscrito") || error.message.includes("already enrolled")) {
-        mensajeError = "Ya te encuentras inscrito en esta materia"
-        tipoError = 'info'
-      } else if (error.message.includes("no encontrado") || error.message.includes("not found")) {
-        mensajeError = "La materia no está disponible para inscripción"
-        mostrarContacto = true
-      } else if (error.message.includes("cupo") || error.message.includes("capacity")) {
-        mensajeError = "No hay cupos disponibles para esta comisión"
-        tipoError = 'warning'
-        mostrarContacto = true
-      } else if (error.message.includes("network") || error.message.includes("Network")) {
-        mensajeError = "Error de conexión. Verifica tu conexión a internet"
-        tipoError = 'warning'
-      } else if (error.message.includes("401") || error.message.includes("unauthorized")) {
-        mensajeError = "Tu sesión ha expirado. Serás redirigido al login"
-        tipoError = 'warning'
-      } else if (error.message) {
-        mensajeError = error.message
-      }
-      
-      // Usar SweetAlert para mostrar errores de inscripción
-      if (tipoError === 'info') {
-        showInfo('Ya inscrito', mensajeError)
-      } else {
-        showEnrollmentError(mensajeError)
-      }
-      
-      // Manejar redirección para error 401
-      if (error.message.includes("401") || error.message.includes("unauthorized")) {
-        setTimeout(() => {
-          nextRouter.push('/login')
-        }, 2000)
-      }
-      
-=======
       const mensajeError = err instanceof Error ? err.message : "No se pudo completar la inscripción"      
->>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
       setError(mensajeError)
       
       setTimeout(() => {

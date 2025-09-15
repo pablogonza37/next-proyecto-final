@@ -16,19 +16,11 @@ const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
 
     if (result.isConfirmed) {
       try {
-<<<<<<< HEAD
         await action(); // ejecuta la función de borrado (axios)
         await showSuccess("¡Eliminado!", `${nombreItem} ha sido eliminado correctamente`);
         router.refresh(); // 🔹 Esto recarga los datos del server component
-      } catch (error: any) {
-        await showError("Error al eliminar", error.message || "No se pudo eliminar el elemento");
-=======
-        await action(); 
-        Swal.fire("Borrado", `${nombreItem} ha sido eliminado`, "success");
-        router.refresh(); 
       } catch (error: unknown) {
-        Swal.fire("Error", error instanceof Error ? error.message : "No se pudo eliminar el elemento", "error");
->>>>>>> 5f4f1fdf439ad7e80e563514012ababdc9787174
+        await showError("Error al eliminar", error instanceof Error ? error.message : "No se pudo eliminar el elemento");
         console.error(error);
       }
     }
