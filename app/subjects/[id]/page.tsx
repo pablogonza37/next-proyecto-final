@@ -148,8 +148,6 @@ const SubjectDetailPage: React.FC = () => {
           setCheckingEnrollment(true)
           const usuario = await obtenerUsuarioPorEmail(session.user.email, session.backendToken)
           const verificacion = await verificarInscripcion(usuario._id, subject._id, session.backendToken)
- 
-          console.log(verificacion)
           
           if (verificacion.inscripto === false) {
             setCanEnroll(true)
