@@ -47,7 +47,7 @@ const handler = NextAuth({
       //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const t: any = token
       s.user.email = t.email
-      s.user.nombreyUsuario = t.nombreUsuario
+      s.user.nombreUsuario = t.nombreUsuario
       s.backendToken = t.backendToken
       s.user.nombreRol = t.rol
       return s
