@@ -162,7 +162,7 @@ export async function obtenerMateriasConComisiones(id: string) {
 export async function verificarInscripcion(usuarioId: string, materiaId: string, token: string): Promise<verificacionInscripcionInterface> {
   try {
     const res = await axios.post(`${API_URL}/inscripciones/verificar-inscripcion`, {
-      usuario: usuarioId,
+      alumno: usuarioId,
       materia: materiaId
     }, {
       headers: { 

@@ -3,8 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
-import Swal from "sweetalert2"
-import "sweetalert2/dist/sweetalert2.min.css"
+import { showLogoutSuccess } from "@/lib/sweetalert"
 import Loader from "../ui/Loader"
 
 export const Navbar = () => {
@@ -20,14 +19,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     signOut({ callbackUrl: "/" })
-    Swal.fire({
-      icon: "success",
-      title: "Has cerrado sesión correctamente",
-      timer: 2000,
-      showConfirmButton: false,
-      timerProgressBar: true,
-      position: "top-end",
-    })
+    showLogoutSuccess()
   }
 
   const toggleMobileMenu = () => {

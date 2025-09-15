@@ -4,7 +4,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { motion } from "framer-motion";
 import { registerUser } from "../services/registerService";
-import Swal from "sweetalert2";
+import { showSuccess, showError } from "@/lib/sweetalert";
 
 type RegisterFormInputs = {
   nombreUsuario: string;
@@ -24,6 +24,7 @@ const RegisterPage: React.FC = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm<RegisterFormInputs>();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
@@ -37,17 +38,17 @@ const RegisterPage: React.FC = () => {
         role: data.role || "alumno",
       });
 
-      Swal.fire({
-        icon: "success",
-        title: "Usuario creado",
-        text: `✅ ${result.nombre} se registró correctamente`,
-      });
+      await showSuccess(
+        "¡Registro exitoso!",
+        `✅ ${result.nombre} se registró correctamente`
+      );
+
+      reset(); 
     } catch (error: unknown) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: `❌ ${error instanceof Error ? error.message : "Error al registrar usuario"}`,
-      });
+      await showError(
+        "Error en el registro", 
+        `❌ ${error instanceof Error ? error.message : "Error al registrar usuario"}`
+      );
     }
   };
 

@@ -11,8 +11,7 @@ import { ArrowLeft, Clock, BookOpen, GraduationCap, Users, Calendar, Award, Star
 import { obtenerMateriaPorId, nuevaInscripcionCompleta, obtenerMateriasConComisiones, obtenerUsuarioPorEmail, verificarInscripcion } from "@/app/admin/inscripciones/actions"
 import { useSession } from "next-auth/react"
 import Image from "next/image"
-import Swal from "sweetalert2"
-import "sweetalert2/dist/sweetalert2.min.css"
+import { showEnrollmentError, showInfo } from "@/lib/sweetalert"
 
 interface Subject {
   _id: string
@@ -69,33 +68,10 @@ const SubjectDetailPage: React.FC = () => {
         } else {
           // Mostrar alerta informativa sobre comisiones no disponibles
           setTimeout(() => {
-            Swal.fire({
-              icon: "info",
-              title: "Comisiones no disponibles",
-              html: `
-                <div class="text-left">
-                  <p class="mb-3">Actualmente no hay comisiones disponibles para <strong>${materiaData.nombreMateria}</strong>.</p>
-                  <p class="mb-2">Esto puede ocurrir por:</p>
-                  <ul class="list-disc list-inside text-sm text-gray-600 space-y-1">
-                    <li>Las comisiones aún no han sido programadas</li>
-                    <li>Todas las comisiones están completas</li>
-                    <li>El período de inscripciones ha finalizado</li>
-                  </ul>
-                  <p class="mt-3 text-sm">Te recomendamos contactar con la administración o volver más tarde.</p>
-                </div>
-              `,
-              showCloseButton: true,
-              showCancelButton: true,
-              confirmButtonText: "Contactar Administración",
-              cancelButtonText: "Entendido",
-              confirmButtonColor: "#3b82f6",
-              cancelButtonColor: "#6b7280",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // Redirigir a página de contacto
-                router.push('/contactanos')
-              }
-            })
+            showInfo(
+              "Comisiones no disponibles",
+              `Actualmente no hay comisiones disponibles para ${materiaData.nombreMateria}. Esto puede ocurrir porque las comisiones aún no han sido programadas, todas están completas o el período de inscripciones ha finalizado. Te recomendamos contactar con la administración o volver más tarde.`
+            )
           }, 1000)
         }
       } catch (err: unknown) {
@@ -115,18 +91,8 @@ const SubjectDetailPage: React.FC = () => {
         
         setError(errorMessage)
         
-        Swal.fire({
-          icon: "error",
-          title: "Error al cargar la materia",
-          text: errorMessage,
-          footer: '<a href="/contactanos">¿Necesitas ayuda? Contáctanos</a>',
-          showConfirmButton: true,
-          confirmButtonText: "Reintentar",
-          showCancelButton: true,
-          cancelButtonText: "Volver",
-          confirmButtonColor: "#3b82f6",
-          cancelButtonColor: "#6b7280",
-        }).then((result) => {
+        // Mostrar alerta de error más detallada
+        showEnrollmentError(errorMessage).then((result) => {
           if (result.isConfirmed) {
             window.location.reload()
           } else if (result.isDismissed) {
@@ -207,13 +173,10 @@ const SubjectDetailPage: React.FC = () => {
     }
 
     if (!selectedComision || !comisiones || comisiones.length === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "Comisión requerida",
-        text: "Por favor, selecciona una comisión para inscribirte.",
-        confirmButtonText: "Entendido",
-        confirmButtonColor: "#3b82f6",
-      })
+      await showInfo(
+        "Comisión requerida",
+        "Por favor, selecciona una comisión para inscribirte."
+      )
       return
     }
 
