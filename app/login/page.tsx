@@ -54,7 +54,6 @@ const LoginPage: React.FC = () => {
         }, 2000)
       }
     } catch (err) {
-      console.error(err)
       await showServerError()
     }
   }

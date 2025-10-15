@@ -21,7 +21,6 @@ const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
         router.refresh();
       } catch (error: unknown) {
         await showError("Error al eliminar", error instanceof Error ? error.message : "No se pudo eliminar el elemento");
-        console.error(error);
       }
     }
   };
