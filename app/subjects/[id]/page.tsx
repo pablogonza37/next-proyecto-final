@@ -76,7 +76,6 @@ const SubjectDetailPage: React.FC = () => {
         }
       } catch (err: unknown) {
         const error = err as Error
-        console.error("Error cargando materia:", error)
         let errorMessage = "No se pudo cargar la información de la materia"
         
         if (error.message?.includes("network") || error.message?.includes("Network")) {
@@ -113,8 +112,6 @@ const SubjectDetailPage: React.FC = () => {
           setCheckingEnrollment(true)
           const usuario = await obtenerUsuarioPorEmail(session.user.email, session.backendToken)
           const verificacion = await verificarInscripcion(usuario._id, subject._id, session.backendToken)
-          
-          console.log(usuario._id,subject._id)
           if (verificacion.inscripto === false) {
             setCanEnroll(true)
             setEnrollmentMessage(null)
