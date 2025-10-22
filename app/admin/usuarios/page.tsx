@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { obtenerUsuarios } from "./actions";
 
 import Heading from "@/components/ui/Heading";
