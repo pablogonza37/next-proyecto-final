@@ -11,7 +11,6 @@ export async function obtenerComisiones() {
     const res = await axios.get(`${API_URL}/comisiones`);
     return res.data; 
   } catch (error: unknown) {
-    console.error("Error al obtener las comisiones:", error instanceof AxiosError ? error.response?.data : error);
     const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudieron cargar las comisiones" : "No se pudieron cargar las comisiones";
     throw new Error(mensaje);
   }
@@ -30,7 +29,6 @@ export async function nuevaComision(data: dataComisionInterface) {
     });
     return res.data;
   } catch (error: unknown) {
-    console.error("Error al crear una comisión:", error instanceof AxiosError ? error.response?.data : error);
     const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo crear la comisión" : "No se pudo crear la comisión";
 
     throw new Error(mensaje);
@@ -47,7 +45,6 @@ export async function actualizarComision(
     });
     return res.data;
   } catch (error: unknown) {
-    console.error("Error al actualizar comisión:", error instanceof AxiosError ? error.response?.data : error);
     const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo actualizar la comisión" : "No se pudo actualizar la comisión";
     throw new Error(mensaje);
   }
@@ -60,7 +57,6 @@ export async function borrarComision(id: string) {
     });
     return res.data; 
   } catch (error: unknown) {
-    console.error("Error al borrar la comisión:", error instanceof AxiosError ? error.response?.data : error);
     const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo borrar la comisión" : "No se pudo borrar la comisión";
     throw new Error(mensaje);
   }

@@ -43,7 +43,6 @@ const RolFormEditar = ({ rolId, rolData }: RolFormProps) => {
           setValue("nombreRol", data.nombreRol);
           setValue("estado", data.estado);
         } catch (error: unknown) {
-          console.error("Error al cargar rol:", error);
         }
       };
       fetchRol();

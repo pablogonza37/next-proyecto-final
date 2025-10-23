@@ -49,7 +49,6 @@ const MateriaSearcher: React.FC<MateriaSearcherProps> = ({ className = "" }) => 
       setIsOpen(materiasActivas.length > 0)
       setSelectedIndex(-1)
     } catch (error) {
-      console.error('Error buscando materias:', error)
       setMaterias([])
       setIsOpen(false)
     } finally {

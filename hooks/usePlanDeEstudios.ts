@@ -32,7 +32,6 @@ export const usePlanDeEstudios = () => {
         
         setMateriasPorNivel(materiasAgrupadas)
       } catch (err) {
-        console.error("Error al cargar materias:", err)
         setError("No se pudieron cargar las materias del plan de estudios")
       } finally {
         setLoading(false)
