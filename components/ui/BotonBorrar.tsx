@@ -5,7 +5,7 @@ import { confirmDelete, showSuccess, showError } from "@/lib/sweetalert";
 
 type BotonBorrarProps = {
   nombreItem: string;
-  action: () => Promise<{ ok: boolean; mensaje?: string; data?: any }>;
+  action: () => Promise<{ ok: boolean; mensaje?: string; data?: unknown }>;
   className?: string;
 };
 
