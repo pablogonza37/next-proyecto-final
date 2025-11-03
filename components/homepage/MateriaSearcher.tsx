@@ -3,10 +3,11 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, BookOpen, Loader2 } from 'lucide-react'
+import { Search, BookOpen, Loader2, AlertCircle } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import axios from 'axios'
+import { showInfo } from "@/lib/sweetalert"
 
 interface Materia {
   _id: string
@@ -72,11 +73,29 @@ const MateriaSearcher: React.FC<MateriaSearcherProps> = ({ className = "" }) => 
     debouncedSearch(value)
   }
 
-  const handleMateriaSelect = (materia: Materia) => {
-    router.push(`/subjects/${materia._id}`)
-    setSearchTerm("")
-    setIsOpen(false)
-    setMaterias([])
+  const handleMateriaSelect = async (materia: Materia) => {
+    try {
+      const response = await axios.get(`${API_URL}/comisiones/materia/${materia._id}`)
+      const comisiones = response.data
+
+      if (!comisiones || comisiones.length === 0) {
+        showInfo(
+          "Comisiones no disponibles",
+          `La materia "${materia.nombreMateria}" actualmente no tiene comisiones disponibles. Esto puede ocurrir porque las comisiones aún no han sido programadas, todas están completas o el período de inscripciones ha finalizado. Te recomendamos contactar con la administración o volver más tarde.`
+        )
+        return
+      }
+
+      router.push(`/subjects/${materia._id}`)
+      setSearchTerm("")
+      setIsOpen(false)
+      setMaterias([])
+    } catch (error) {
+      showInfo(
+        "Error al verificar materia",
+        "No se pudo verificar la disponibilidad de comisiones para esta materia. Inténtalo nuevamente."
+      )
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -218,7 +237,7 @@ const MateriaSearcher: React.FC<MateriaSearcherProps> = ({ className = "" }) => 
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="p-2 bg-blue-600/20 rounded-lg flex-shrink-0 mt-0.5">
+                    <div className="p-2 bg-blue-600/20 rounded-lg shrink-0 mt-0.5">
                       <BookOpen className="h-4 w-4 text-blue-400" />
                     </div>
                     <div className="flex-1 min-w-0">

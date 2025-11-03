@@ -62,11 +62,9 @@ const SubjectDetailPage: React.FC = () => {
         setSubject(materiaData)
         setComisiones(comisionesData)
         
-        // Manejo mejorado de comisiones disponibles
         if (comisionesData && comisionesData.length > 0) {
           setSelectedComision(comisionesData[0]._id)
         } else {
-          // Mostrar alerta informativa sobre comisiones no disponibles
           setTimeout(() => {
             showInfo(
               "Comisiones no disponibles",
@@ -249,7 +247,7 @@ const SubjectDetailPage: React.FC = () => {
 
   if (error && !subject) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-b from-gray-900 to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-400 mb-4">Error</h1>
           <p className="text-gray-400 mb-6">{error}</p>
@@ -267,7 +265,7 @@ const SubjectDetailPage: React.FC = () => {
 
   if (!subject) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-b from-gray-900 to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-400 mb-4">Materia no encontrada</h1>
           <Button 
@@ -293,8 +291,8 @@ const SubjectDetailPage: React.FC = () => {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-800/80 to-gray-900/80" />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-gray-800/80 to-gray-900/80" />
+          <div className="absolute inset-0 bg-linear-to-t from-gray-900 via-gray-900/50 to-transparent" />
         </div>
         
         <div className="relative z-10 flex flex-col justify-center h-72 sm:h-64 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 sm:pt-16 md:pt-20 lg:pt-24">
@@ -315,15 +313,15 @@ const SubjectDetailPage: React.FC = () => {
               
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                 <div className="flex items-center gap-1.5 sm:gap-2 text-gray-200 bg-gray-800/60 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-gray-700">
-                  <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
+                  <GraduationCap className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 shrink-0" />
                   <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{getLevelName(subject.nivel)}</span>
                 </div>
                 <div className="flex items-center gap-1.5 sm:gap-2 text-gray-200 bg-gray-800/60 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-gray-700">
-                  <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 shrink-0" />
                   <span className="text-xs sm:text-sm font-medium whitespace-nowrap">{getDurationByLevel(subject.nivel)}</span>
                 </div>
                 <div className="flex items-center gap-1.5 sm:gap-2 text-gray-200 bg-gray-800/60 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-gray-700">
-                  <Star className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 flex-shrink-0" />
+                  <Star className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500 shrink-0" />
                   <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Destacada</span>
                 </div>
               </div>
@@ -350,7 +348,7 @@ const SubjectDetailPage: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-8 lg:order-2"
             >
-              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 shadow-2xl">
+              <Card className="bg-linear-to-br from-gray-800 to-gray-900 border-gray-700 shadow-2xl">
               <CardContent className="p-8 xl:px-12 xl:py-6">
                 <div className="flex flex-col md:flex-row xl:flex-row items-center justify-between gap-6 xl:gap-12">
                   <div className="text-center md:text-left xl:max-w-lg">
@@ -386,7 +384,7 @@ const SubjectDetailPage: React.FC = () => {
                         className="bg-yellow-900/30 border border-yellow-600/50 rounded-lg p-4 mt-3"
                       >
                         <div className="flex items-center gap-3 text-yellow-400">
-                          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                          <AlertCircle className="h-5 w-5 shrink-0" />
                           <div className="text-sm">
                             <p className="font-medium mb-1">No hay comisiones disponibles</p>
                             <p className="text-yellow-300/80 text-xs">
@@ -471,14 +469,13 @@ const SubjectDetailPage: React.FC = () => {
               </CardContent>
             </Card>
 
-              {/* Details Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8">
                 <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
+                <Card className="bg-linear-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
                   <CardContent className="p-6 xl:py-0">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-blue-600">
@@ -511,7 +508,7 @@ const SubjectDetailPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
+                <Card className="bg-linear-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
                   <CardContent className="p-6 xl:py-0">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-blue-600">
@@ -542,7 +539,7 @@ const SubjectDetailPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
+                <Card className="bg-linear-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 h-full">
                   <CardContent className="p-6 xl:py-0">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 rounded-lg bg-blue-600">
@@ -569,9 +566,7 @@ const SubjectDetailPage: React.FC = () => {
               </motion.div>
               </div>
 
-              {/* Main Content Section - appears first in desktop due to flex-col-reverse */}
               <div className="lg:order-1">
-                {/* This section can be used for additional main content if needed */}
               </div>
             </motion.div>
           </div>
@@ -593,7 +588,6 @@ const SubjectDetailPage: React.FC = () => {
               </motion.div>
             )}
         </div>
-        {/* Espaciado adicional en móviles antes del footer */}
       </div>
     </div>
   )

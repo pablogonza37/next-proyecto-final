@@ -32,7 +32,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      {/* Contenido principal */}
       <motion.section className="bg-gradient-to-b from-gray-800 to-black py-20" {...fadeIn}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.h2 className="text-5xl font-bold text-white mb-6" {...fadeInUp}>
