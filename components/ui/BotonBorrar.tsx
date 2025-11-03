@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { confirmDelete, showSuccess, showError } from "@/lib/sweetalert";
 
-interface BotonBorrarProps {
-  nombreItem: string;                
-  action: () => Promise<unknown>;        
-  className?: string;                
-}
+type BotonBorrarProps = {
+  nombreItem: string;
+  action: () => Promise<{ ok: boolean; mensaje?: string; data?: unknown }>;
+  className?: string;
+};
 
 const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
   const router = useRouter();
@@ -16,7 +16,11 @@ const BotonBorrar = ({ nombreItem, action, className }: BotonBorrarProps) => {
 
     if (result.isConfirmed) {
       try {
-        await action();
+        const respuesta = await action();
+        if (!respuesta.ok) {
+          await showError("Error al eliminar", respuesta.mensaje);
+          return;
+        }
         await showSuccess("¡Eliminado!", `${nombreItem} ha sido eliminado correctamente`);
         router.refresh();
       } catch (error: unknown) {
