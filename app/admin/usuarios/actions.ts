@@ -52,9 +52,16 @@ export async function borrarUsuario(id: string) {
     const res = await axios.delete(`${API_URL}/auth/${id}`, {
       headers: { "Content-Type": "application/json" },
     });
-    return res.data; 
+
+    return { ok: true, data: res.data };
   } catch (error: unknown) {
-    const mensaje = error instanceof AxiosError ? error.response?.data?.mensaje || "No se pudo borrar el usuario" : "No se pudo borrar el usuario";
-    throw new Error(mensaje);
+    console.error("Error al borrar usuario:", error);
+
+    const mensaje =
+      axios.isAxiosError(error)
+        ? error.response?.data?.mensaje || "No se pudo borrar el usuario"
+        : "No se pudo borrar el usuario";
+
+    return { ok: false, mensaje };
   }
 }
