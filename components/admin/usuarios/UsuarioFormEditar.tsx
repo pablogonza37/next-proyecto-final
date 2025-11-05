@@ -36,7 +36,7 @@ const UsuarioFormEditar = ({ usuario }: UsuarioFormEditarProps) => {
     setMensaje(null);
     try {
       const res = await actualizarUsuario(usuario._id, data);
-      setMensaje(`Usuario "${res.nombre}" actualizado correctamente`);
+      setMensaje(`Usuario "${res.nombre} ${res.apellido}" actualizado correctamente`);
       router.push("/admin/usuarios");
     } catch (error: unknown) {
       setMensaje(error instanceof Error ? error.message : "Error al actualizar el usuario");
